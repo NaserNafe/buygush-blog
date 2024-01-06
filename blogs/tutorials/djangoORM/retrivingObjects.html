@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Retrieving objects</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="retrieving-objects">Retrieving objects</h1>
+<p>برای بازخوانی اطلاعات از دیتابیس باید یک <strong>کوئری ست</strong> از طریق <strong>منیجر</strong> تعریف شده برای مدل مان ایجاد شود.</p>
+<p>یک کوئری ست ارائه دهنده مجموعه ای از اشیا از دیتابیس است که می تواند یک یا هیچ یا بسیاری فیلتر داشته باشد.
+فیلترها بر اساس پارامترهای ورودی می توانند نتایج را فیلتر کنند. در زبان <strong>اس کیو ال</strong> یک <strong>کوئری ست</strong> معادل یک عبارت <strong>سلکت SELECT</strong> است و فیلتر را می توان معادل <strong>WHERE or LIMIT</strong> به حساب آورد</p>
+<p>برای دست رسی به یک کوئری ست از پنیجر مدل میتوان استفاده کرد. هر مدلی حداقل یک منیجر دارد که به حالت دیفالت <strong>objects</strong> نامیده می شود.
+و به شکل زیر از طریق کلاس مدل در دست رس است.</p>
+<pre><code class="language-python">
+<span class="hljs-meta">&gt;&gt;&gt; </span>Blog.objects
+&lt;django.db.models.manager.Manager <span class="hljs-built_in">object</span> at ...&gt;
+
+<span class="hljs-meta">&gt;&gt;&gt; </span>b = Blog(name=<span class="hljs-string">&quot;Foo&quot;</span>, tagline=<span class="hljs-string">&quot;Bar&quot;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>b.objects
+
+Traceback:
+    ...
+AttributeError: <span class="hljs-string">&quot;Manager isn&#x27;t accessible via Blog instances.&quot;</span>
+
+</code></pre>
+<blockquote>
+<p>باید توجه داشت که منیجر ها فقط از طریق کلاس مدل ها قابل دسترسی هستند  نه اینستنسی از مدل. این به جهت جدا کردن عملیات <strong>table-level</strong> از عملیات <strong>record-level</strong> است</p>
+</blockquote>
+<p>منیجر اصلی ترین منبع کوئری ست ها هستند. برای مثال
+Blog.objects.all()
+یک کوئری ست را برمی گرداند که شامل همه اشیای تیبل بلاگ است.</p>
+<h2 id="retrieving-all-objects">Retrieving all objects</h2>
+<p>راحترین راه بازخوانی اطلاعات یک جدول از دیتابیس گرفتن همه ردیف های آن است. برای انجام آنهمانطور که گفتیم از متد all() استفاده میشود.</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>all_entries = Entry.objects.<span class="hljs-built_in">all</span>()
+</code></pre>
+<p>متد ال یک کوئری ست که همه اشیای جدول را برمیگرداند.</p>
+<h2 id="retrieving-specific-objects-with-filters">Retrieving specific objects with filters</h2>
+<p>از طریق تعریف فیلترها می توان به یک آبجگت خاص در دیتابیس دسترسی پیدا کرد.</p>
+<p>دو روش معمول در پالایش  یک کوئری ست  عبارتند از:</p>
+<p><strong>filter(**kwargs)</strong>
+که یک کوئری ست جدید شامل اشیایی که با <strong>لوک آپ</strong> مورد نظر همخوان است برمی گرداند.</p>
+<p><strong>exclude(**kwargs)</strong>
+یک کوئری ست جدید که شامل اشیایی که با <strong>لوک آپ</strong> مورد نظر همخوان نیست را بر میگرداند.</p>
+<p>مثلا برای بازخوانی بلاگ های سال ۲۰۱۶ بدین شکل می شود نوشت:</p>
+<pre><code class="language-python">
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__year=<span class="hljs-number">2006</span>)
+<span class="hljs-keyword">or</span>
+Entry.objects.<span class="hljs-built_in">all</span>().<span class="hljs-built_in">filter</span>(pub_date__year=<span class="hljs-number">2006</span>)
+</code></pre>
+
+        
+        
+    </body>
+    </html>

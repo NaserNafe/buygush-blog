@@ -1,0 +1,59 @@
+{
+    "phrasal-verbs" : {
+      "refer to": {
+        "grammar": ["refer sb to sth", "refer sb/sth as", "refer to sb/sth by"],
+        "en-mean": ["mention to", "allude to", "touch on"],
+        "fr-mean": [
+          "رجوع شود",
+          "ارجاع دادن",
+          "اشاره کردن",
+          "مربوط بودن",
+          "برگشتن به"
+        ],
+        "fr-exg": [
+          "او دوست نداشت کسی رفر (اشاره) کنه به پای چوبیش",
+          "صحبتهای من رفر (مربوط) میشه به سال گذشته",
+          "دپیوتی (درکیری) اونا رفر شد (ارجاع داده شد) به دادگاه لاهه (هیوج کورت)."
+        ],
+        "en-exg": [
+          "The victims were not referred to by name",
+          "She always referred to Ban as 'that nice man'"
+        ],
+        "relatives": ["referee", "reference", "reference book"]
+      },
+      "allude to": {
+        "grammar": ["allude to sb/sth"],
+        "en-mean": ["refer to", "point", "imply"],
+        "fr-mean": ["اشاره کردن"],
+        "fr-exg": ["او آلوود (اشاره) کرد به قیمت های روزافزون"],
+        "en-exg": [
+          "He did not allude to the remarks made by the previous speacker."
+        ],
+        "relatives": ["allusion"]
+      },
+      "": {
+        "grammar": [""],
+        "en-mean": ["", "", ""],
+        "fr-mean": ["", "", "", "", ""],
+        "fr-exg": ["", "", ""],
+        "en-exg": [],
+        "relatives": ["", "", ""]
+      },
+      "": {
+        "grammar": [""],
+        "en-mean": ["", "", ""],
+        "fr-mean": ["", "", "", "", ""],
+        "fr-exg": ["", "", ""],
+        "en-exg": [],
+        "relatives": ["", "", ""]
+      },
+      "": {
+        "grammar": [""],
+        "en-mean": ["", "", ""],
+        "fr-mean": ["", "", "", "", ""],
+        "fr-exg": ["", "", ""],
+        "en-exg": [],
+        "relatives": ["", "", ""]
+      }
+    }
+}

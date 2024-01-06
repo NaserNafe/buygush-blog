@@ -1,0 +1,43 @@
+{
+  "vocabs": {
+    "comprise": {
+      "grammar": [
+        "be comprised of somebody/something",
+        "Don’t say: The exam is comprising four questions.",
+        "The participle form comprising is often used",
+        "Comprise is often used in the passive with of"
+      ],
+      "en-mean": ["make up", "constitute", " consist"],
+      "fr-mean": ["شامل شدن", "تشکیل دادن", "تشکیل شدن", "", ""],
+      "fr-exg": [
+        "خانه کمپرایز (تشکیل) شده از یک آشپزخانه و یک خواب و یک پذیرایی.",
+        "",
+        ""
+      ],
+      "en-exg": [
+        "The house comprises two bedrooms, a kitchen, and a living room.",
+        "The organization is comprised of four parts.",
+        "Food exports are very important, comprising 74% of the total.",
+        "The exam comprises four questions.",
+        "Women comprise a high proportion of part-time workers."
+      ],
+      "relatives": ["consist", "", ""]
+    },
+    "": {
+      "grammar": [""],
+      "en-mean": ["", "", ""],
+      "fr-mean": ["", "", "", "", ""],
+      "fr-exg": ["", "", ""],
+      "en-exg": [],
+      "relatives": ["", "", ""]
+    },
+    "": {
+      "grammar": [""],
+      "en-mean": ["", "", ""],
+      "fr-mean": ["", "", "", "", ""],
+      "fr-exg": ["", "", ""],
+      "en-exg": [],
+      "relatives": ["", "", ""]
+    }
+  }
+}

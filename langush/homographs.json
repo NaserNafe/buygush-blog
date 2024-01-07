@@ -1,0 +1,25 @@
+{
+  "homographs": {
+    "meat": {
+      "en-means": [
+        "the flesh of animals and birds eaten as food",
+        "something interesting or important in a talk, book, film etc"
+      ],
+      "fr-means": ["گوشت", "(میوه) گوشت", "مایه", "محتوا", "مغز"],
+      "fr-exg": ["رسیدیم به میت (گوشت) مطلب", "", ""],
+      "en-exg": [
+        {
+          "There’s no meat to their arguments.": "https://www.ldoceonline.com/media/english/exaProns/p008-001714700.mp3?version=1.2.66"
+        },
+        {
+          "We then got down to the real meat of the debate (=the main and most interesting part of it).": "https://www.ldoceonline.com/media/english/exaProns/p008-001766793.mp3?version=1.2.66"
+        }
+      ],
+      "relatives": [
+        "red meat (=a dark-coloured meat, for example beef)",
+        "white meat (=meat that is pale in color, for example chicken)",
+        ""
+      ]
+    }
+  }
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Field lookups</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="field-lookups">Field lookups</h1>
+<p>جست و جوی فیلد با <strong>لوک آپ</strong> تعیین کننده اساس کی ورد <strong>WHERE</strong> در اس کیو ال هستش که به عنوان کی ورد آرگیومنت به متد های <strong>فیلتر</strong> ، <strong>اکسکلود</strong> و متد <strong>گت</strong> مشخص می شود.</p>
+<p>بنیان <strong>لوک آپ</strong>ها فرم زیر را به خود میگیرد که ما بین فییلد و لوک آپ تایپ، دابل آندراسکور قرار می گیرد.</p>
+<h2 id="field__lookuptypevalue">field__lookuptype=value</h2>
+<p>برای مثال:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__lte=<span class="hljs-string">&quot;2006-01-01&quot;</span>)
+
+</code></pre>
+<p>که به زبان اسکیو الی می شود:</p>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> blog_entry <span class="hljs-keyword">WHERE</span> pub_date <span class="hljs-operator">&lt;=</span> <span class="hljs-string">&#x27;2006-01-01&#x27;</span>;
+</code></pre>
+<blockquote>
+<p>فیلد نوشته شده در لوک آپ حتما باید نام یکی از فیلد های مدل باشد. فقط استثنا در فیلد های <strong>فارین کی</strong> است که می توان نام فیلد را با <strong>_id</strong>  که نمایانگر <strong>پرایمری کی برای فارین مدل</strong> است. در صورت خطا در کی ورد آرگیومنت فانکشن لوک آپ ارور <strong>TypeError</strong> را رییز خواهد کرد.</p>
+</blockquote>
+<pre><code class="language-python">
+<span class="hljs-meta">&gt;&gt;&gt; </span>Entry.objects.<span class="hljs-built_in">filter</span>(blog_id=<span class="hljs-number">4</span>)
+</code></pre>
+<blockquote>
+<p>برای سادگی وقتی هیچ لوک آپی ارائه نمی شود، خود به خود لوک آپ <strong>exact</strong> در نظر گرفته میشود.</p>
+</blockquote>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Blog.objects.get(id__exact=<span class="hljs-number">14</span>)  <span class="hljs-comment"># Explicit form</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>Blog.objects.get(<span class="hljs-built_in">id</span>=<span class="hljs-number">14</span>)  <span class="hljs-comment"># __exact is implied</span>
+</code></pre>
+<h2 id="exact">exact</h2>
+<p>مقدار دقیقا مشابه</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Entry.objects.get(headline__exact=<span class="hljs-string">&quot;Cat bites dog&quot;</span>)
+
+   Entry.objects.get(id__exact=<span class="hljs-number">14</span>)
+   Entry.objects.get(id__exact=<span class="hljs-literal">None</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Cat bites dog&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-number">14</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> id <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>;
+</code></pre>
+<h2 id="iexact">iexact</h2>
+<p>مقدار مشابه و غیرحساس به بزرگی و کوچکی حروف</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Blog.objects.get(name__iexact=<span class="hljs-string">&quot;beatles blog&quot;</span>)
+    Blog.objects.get(name__iexact=<span class="hljs-literal">None</span>)
+</code></pre>
+<p>با مقادیر زیر مچ خواهد شد.
+<strong>&quot;Beatles Blog&quot;, &quot;beatles blog&quot;, &quot;BeAtlES blOG&quot;</strong></p>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> name ILIKE <span class="hljs-string">&#x27;beatles blog&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> name <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>;
+</code></pre>
+<h2 id="contains">contains</h2>
+<p>وقتی که فیلد شامل مقدار تعیین شده باشد.</p>
+<pre><code class="language-python">Entry.objects.get(headline__contains=<span class="hljs-string">&quot;Lennon&quot;</span>)
+</code></pre>
+<p>معادل اسکیو الی</p>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%Lennon%&#x27;</span>;
+</code></pre>
+<p>با مقدار <strong>Today Lennon honored</strong> مچ می شود ولی با مقدار <strong>today lennon honored</strong> مچ نمی شود.</p>
+<p>همچنین برای کانتین هم ورژن کیس سنسیتیو وجود وارد</p>
+<h1 id="icontains">icontains</h1>
+<pre><code class="language-python">Entry.objects.get(headline__icontains=<span class="hljs-string">&quot;Lennon&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline ILIKE <span class="hljs-string">&#x27;%Lennon%&#x27;</span>;
+</code></pre>
+<h2 id="in">in</h2>
+<p>از میان هر چیز قابل پیمایش مثل لیست، تاپل یا کوئری ست و یا یک رشته استرینگ.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(id__in=[<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>])
+Entry.objects.<span class="hljs-built_in">filter</span>(headline__in=<span class="hljs-string">&quot;abc&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> id <span class="hljs-keyword">IN</span> (<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>);
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>);
+</code></pre>
+<p>مثال برای کوئری ست عبارت است از:</p>
+<pre><code class="language-python">inner_qs = Blog.objects.<span class="hljs-built_in">filter</span>(name__contains=<span class="hljs-string">&quot;Cheddar&quot;</span>)
+entries = Entry.objects.<span class="hljs-built_in">filter</span>(blog__in=inner_qs)
+</code></pre>
+<p>این کوئری ست به عنوان ساب سلکت ستیتمنت تعبیر خواهد شد.</p>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> blog.id <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> id <span class="hljs-keyword">FROM</span> ... <span class="hljs-keyword">WHERE</span> NAME <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%Cheddar%&#x27;</span>)
+</code></pre>
+
+        
+        
+    </body>
+    </html>

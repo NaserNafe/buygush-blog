@@ -1,0 +1,10 @@
+{
+  "COLLOCATIONS": {
+    "meat": {
+        "VERBS": {
+            "eat meat": "I don't eat meat - I'm vegetarian.",
+            "have meat in it": "Dose this stew have meat in it?"
+        }
+    }
+  }
+}

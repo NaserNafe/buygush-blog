@@ -41,8 +41,8 @@
     </head>
     <body class="vscode-body vscode-light">
         <h1 id="field-lookups">Field lookups</h1>
-<p>جست و جوی فیلد با <strong>لوک آپ</strong> تعیین کننده اساس کی ورد <strong>WHERE</strong> در اس کیو ال هستش که به عنوان کی ورد آرگیومنت به متد های <strong>فیلتر</strong> ، <strong>اکسکلود</strong> و متد <strong>گت</strong> مشخص می شود.</p>
-<p>بنیان <strong>لوک آپ</strong>ها فرم زیر را به خود میگیرد که ما بین فییلد و لوک آپ تایپ، دابل آندراسکور قرار می گیرد.</p>
+<p>جست و جوی فیلد با <strong>لوکاپ</strong> تعیین کننده اساس کی ورد <strong>WHERE</strong> در اس کیو ال هستش که به عنوان کی ورد آرگیومنت به متد های <strong>فیلتر</strong> ، <strong>اکسکلود</strong> و متد <strong>گت</strong> مشخص می شود.</p>
+<p>بنیان <strong>لوکاپ</strong>ها فرم زیر را به خود میگیرد که ما بین فییلد و لوکاپ تایپ، دابل آندراسکور قرار می گیرد.</p>
 <h2 id="field__lookuptypevalue">field__lookuptype=value</h2>
 <p>برای مثال:</p>
 <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__lte=<span class="hljs-string">&quot;2006-01-01&quot;</span>)
@@ -52,17 +52,18 @@
 <pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> blog_entry <span class="hljs-keyword">WHERE</span> pub_date <span class="hljs-operator">&lt;=</span> <span class="hljs-string">&#x27;2006-01-01&#x27;</span>;
 </code></pre>
 <blockquote>
-<p>فیلد نوشته شده در لوک آپ حتما باید نام یکی از فیلد های مدل باشد. فقط استثنا در فیلد های <strong>فارین کی</strong> است که می توان نام فیلد را با <strong>_id</strong>  که نمایانگر <strong>پرایمری کی برای فارین مدل</strong> است. در صورت خطا در کی ورد آرگیومنت فانکشن لوک آپ ارور <strong>TypeError</strong> را رییز خواهد کرد.</p>
+<p>فیلد نوشته شده در لوکاپ حتما باید نام یکی از فیلد های مدل باشد. فقط استثنا در فیلد های <strong>فارین کی</strong> است که می توان نام فیلد را با <strong>_id</strong> که نمایانگر <strong>پرایمری کی برای فارین مدل</strong> است. در صورت خطا در کی ورد آرگیومنت فانکشن لوکاپ ارور <strong>TypeError</strong> را رییز خواهد کرد.</p>
 </blockquote>
 <pre><code class="language-python">
 <span class="hljs-meta">&gt;&gt;&gt; </span>Entry.objects.<span class="hljs-built_in">filter</span>(blog_id=<span class="hljs-number">4</span>)
 </code></pre>
 <blockquote>
-<p>برای سادگی وقتی هیچ لوک آپی ارائه نمی شود، خود به خود لوک آپ <strong>exact</strong> در نظر گرفته میشود.</p>
+<p>برای سادگی وقتی هیچ لوکاپی ارائه نمی شود، خود به خود لوکاپ <strong>exact</strong> در نظر گرفته میشود.</p>
 </blockquote>
 <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Blog.objects.get(id__exact=<span class="hljs-number">14</span>)  <span class="hljs-comment"># Explicit form</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>Blog.objects.get(<span class="hljs-built_in">id</span>=<span class="hljs-number">14</span>)  <span class="hljs-comment"># __exact is implied</span>
 </code></pre>
+<hr>
 <h2 id="exact">exact</h2>
 <p>مقدار دقیقا مشابه</p>
 <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Entry.objects.get(headline__exact=<span class="hljs-string">&quot;Cat bites dog&quot;</span>)
@@ -74,6 +75,7 @@
 <span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-number">14</span>;
 <span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> id <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>;
 </code></pre>
+<hr>
 <h2 id="iexact">iexact</h2>
 <p>مقدار مشابه و غیرحساس به بزرگی و کوچکی حروف</p>
 <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Blog.objects.get(name__iexact=<span class="hljs-string">&quot;beatles blog&quot;</span>)
@@ -84,6 +86,7 @@
 <pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> name ILIKE <span class="hljs-string">&#x27;beatles blog&#x27;</span>;
 <span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> name <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>;
 </code></pre>
+<hr>
 <h2 id="contains">contains</h2>
 <p>وقتی که فیلد شامل مقدار تعیین شده باشد.</p>
 <pre><code class="language-python">Entry.objects.get(headline__contains=<span class="hljs-string">&quot;Lennon&quot;</span>)
@@ -92,12 +95,13 @@
 <pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%Lennon%&#x27;</span>;
 </code></pre>
 <p>با مقدار <strong>Today Lennon honored</strong> مچ می شود ولی با مقدار <strong>today lennon honored</strong> مچ نمی شود.</p>
-<p>همچنین برای کانتین هم ورژن کیس سنسیتیو وجود وارد</p>
+<h2 id="همچنین-برای-کانتین-هم-ورژن-کیس-سنسیتیو-وجود-وارد">همچنین برای کانتین هم ورژن کیس سنسیتیو وجود وارد</h2>
 <h1 id="icontains">icontains</h1>
 <pre><code class="language-python">Entry.objects.get(headline__icontains=<span class="hljs-string">&quot;Lennon&quot;</span>)
 </code></pre>
 <pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline ILIKE <span class="hljs-string">&#x27;%Lennon%&#x27;</span>;
 </code></pre>
+<hr>
 <h2 id="in">in</h2>
 <p>از میان هر چیز قابل پیمایش مثل لیست، تاپل یا کوئری ست و یا یک رشته استرینگ.</p>
 <pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(id__in=[<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>])
@@ -110,8 +114,204 @@ Entry.objects.<span class="hljs-built_in">filter</span>(headline__in=<span class
 <pre><code class="language-python">inner_qs = Blog.objects.<span class="hljs-built_in">filter</span>(name__contains=<span class="hljs-string">&quot;Cheddar&quot;</span>)
 entries = Entry.objects.<span class="hljs-built_in">filter</span>(blog__in=inner_qs)
 </code></pre>
-<p>این کوئری ست به عنوان ساب سلکت ستیتمنت تعبیر خواهد شد.</p>
+<p>این کوئری ست به عنوان ساب سلکت ایستیتمنت تعبیر خواهد شد.</p>
 <pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> blog.id <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> id <span class="hljs-keyword">FROM</span> ... <span class="hljs-keyword">WHERE</span> NAME <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%Cheddar%&#x27;</span>)
+</code></pre>
+<p>باید در <strong>value()</strong> یا <strong>value_list()</strong> دقت داشت که اگر قرار است نتیجه در کوئری ستی که به لوکاپ داده می شود استفاده شود، کوئری ست اول حتما فقط یک فیلد را استخراج کنند.</p>
+<pre><code class="language-python">inner_qs = Blog.objects.<span class="hljs-built_in">filter</span>(name__contains=<span class="hljs-string">&quot;Ch&quot;</span>).values(<span class="hljs-string">&quot;name&quot;</span>)
+entries = Entry.objects.<span class="hljs-built_in">filter</span>(blog__name__in=inner_qs)
+</code></pre>
+<p>مثال برای موردی که رعایت نشده و خطا خواهد داشت به شکل زیر است.</p>
+<pre><code class="language-python"><span class="hljs-comment"># Bad code! Will raise a TypeError.</span>
+inner_qs = Blog.objects.<span class="hljs-built_in">filter</span>(name__contains=<span class="hljs-string">&quot;Ch&quot;</span>).values(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;id&quot;</span>)
+entries = Entry.objects.<span class="hljs-built_in">filter</span>(blog__name__in=inner_qs)
+</code></pre>
+<blockquote>
+<p>در استفاده از کوئری ها به شکل آبشاری باید به پرفرمنس دیتابیس دقت داشت چرا که بعضی از دیتابیس ها مثل <strong>مای اسکیو ال</strong> کوئری آبشاری را بهینه نمی کنند. بهترین حالت برای آنها استخراج کوئری اول در لیستی و سپس انتقال لوکاپ کوئری دوم است.</p>
+</blockquote>
+<pre><code class="language-python">values = Blog.objects.<span class="hljs-built_in">filter</span>(name__contains=<span class="hljs-string">&quot;Cheddar&quot;</span>).values_list(<span class="hljs-string">&quot;pk&quot;</span>, flat=<span class="hljs-literal">True</span>)
+entries = Entry.objects.<span class="hljs-built_in">filter</span>(blog__in=<span class="hljs-built_in">list</span>(values))
+</code></pre>
+<blockquote>
+<p>در مثال فوق <strong>list()</strong> کوئری ست اول را ملزم به استخراج و مقدار دهی می کند سپس به لوکاپ پاس داده می شود. چرا که کوئری ست ها لیزی هستند به عبارتی تا زمانی که نیاز نشده اند در عمل به دیتابیس هیج هدی نمی زنند.</p>
+</blockquote>
+<hr>
+<h2 id="gt">gt</h2>
+<p>لوکاپ بزرگتر است از:</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(id__gt=<span class="hljs-number">4</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">&gt;</span> <span class="hljs-number">4</span>;
+</code></pre>
+<hr>
+<h2 id="gte">gte</h2>
+<h2 id="لوکاپ-بزرگتر-مساوی">لوکاپ بزرگتر مساوی</h2>
+<h2 id="lt">lt</h2>
+<h2 id="لوکاپ-کوچکتر-است-از">لوکاپ کوچکتر است از</h2>
+<h2 id="lte">lte</h2>
+<h2 id="لوکاپ-کوچکتر-مساوی">لوکاپ کوچکتر مساوی</h2>
+<h2 id="startswith">startswith</h2>
+<p>برای جست و جوی کلمات با شروع کننده مد نظر به شکل کیس سنسیتیو</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(headline__startswith=<span class="hljs-string">&quot;Lennon&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;Lennon%&#x27;</span>;
+</code></pre>
+<blockquote>
+<p>دقت داشته باشید که دیتابیس <strong>SQLite</strong> شکل کیس سنسیتیو را ساپرت نمی کند پس <strong>startswith</strong> و <strong>istartswith</strong> حساس به بزرگی و کوچکی حروف نیستند.</p>
+</blockquote>
+<hr>
+<h2 id="istartswith">istartswith</h2>
+<p>حالت غیر حساس به بزرگی و کوچکی حروف</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(headline__istartswith=<span class="hljs-string">&quot;Lennon&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline ILIKE <span class="hljs-string">&#x27;Lennon%&#x27;</span>;
+</code></pre>
+<hr>
+<h2 id="endswith">endswith</h2>
+<p>جست و جو کننده کلمه ای که ختم شود به</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(headline__endswith=<span class="hljs-string">&quot;Lennon&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%Lennon&#x27;</span>;
+</code></pre>
+<hr>
+<h2 id="iendswith">iendswith</h2>
+<p>حالت غیر حساس به بزرگی و کوچکی حروف</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(headline__iendswith=<span class="hljs-string">&quot;Lennon&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> headline ILIKE <span class="hljs-string">&#x27;%Lennon&#x27;</span>
+</code></pre>
+<hr>
+<h2 id="range">range</h2>
+<p>تعیین یک محدوده</p>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> datetime
+
+start_date = datetime.date(<span class="hljs-number">2005</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)
+end_date = datetime.date(<span class="hljs-number">2005</span>, <span class="hljs-number">3</span>, <span class="hljs-number">31</span>)
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__range=(start_date, end_date))
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> pub_date <span class="hljs-keyword">BETWEEN</span> <span class="hljs-string">&#x27;2005-01-01&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-string">&#x27;2005-03-31&#x27;</span>;
+</code></pre>
+<blockquote>
+<p>از رنج در هرجایی استفاده می شود که معادل بیتوین در اس کیو ال است. تاریخ، اعداد و حتی از کاراکتر ها
+توجه: فیلتر کردن فیلد <strong>DateTimeField</strong> با تاریخ شمال روز آخری نخواهد شد، چرا که دربرگیرنده ساعت صفر بامداد است. اگر در مثال بالا pup_date یک فیلد DateTimeField بود معادل اس کیو الی آن به شکل زیر خواهد بود.</p>
+</blockquote>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> pub_date <span class="hljs-keyword">BETWEEN</span> <span class="hljs-string">&#x27;2005-01-01 00:00:00&#x27;</span> <span class="hljs-keyword">and</span> <span class="hljs-string">&#x27;2005-03-31 00:00:00&#x27;</span>;
+</code></pre>
+<hr>
+<h2 id="date">date</h2>
+<p>برای فیلد های دیت تایم مقدار را به دیت یعنی فقط تاریخ تبدیل میکند واجازه می دهد لوکاپ های زنجیری نوشت.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__date=datetime.date(<span class="hljs-number">2005</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>))
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__date__gt=datetime.date(<span class="hljs-number">2005</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>))
+</code></pre>
+<p>معادل سازی کوئری بالا در هر دیتابیس متفاوت خواهد بود.</p>
+<blockquote>
+<p>وقتی در ستینگ <strong>USE_TZ</strong> به مقدار <strong>True</strong> اساین شود فیلدها قبل از فیلتر شدن تبدیل به تایم زون جاری می شوند. برای این نیاز هست کع تایم زون در دیتابیس تعریف شود.</p>
+</blockquote>
+<hr>
+<h2 id="year">year</h2>
+<p>برای فیلد های دیت تایم ،مقدار دقیق سال مورد نظر را بر میگرداند. یک مقدار اینتجر می گیرد و قابلیت زنجیری دارد.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__year=<span class="hljs-number">2005</span>)
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__year__gte=<span class="hljs-number">2005</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> pub_date <span class="hljs-keyword">BETWEEN</span> <span class="hljs-string">&#x27;2005-01-01&#x27;</span> <span class="hljs-keyword">AND</span> <span class="hljs-string">&#x27;2005-12-31&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> pub_date <span class="hljs-operator">&gt;=</span> <span class="hljs-string">&#x27;2005-01-01&#x27;</span>;
+</code></pre>
+<p>ـــ</p>
+<h2 id="month">month</h2>
+<p>برای فیلدهای دیت و دیت تایم. مقدار دقیق ماه را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا ۱۲ را می گیرد.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__month=<span class="hljs-number">12</span>)
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__month__gte=<span class="hljs-number">6</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;month&#x27;</span> <span class="hljs-keyword">FROM</span> pub_date) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;12&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;month&#x27;</span> <span class="hljs-keyword">FROM</span> pub_date) <span class="hljs-operator">&gt;=</span> <span class="hljs-string">&#x27;6&#x27;</span>;
+</code></pre>
+<hr>
+<h2 id="day">day</h2>
+<p>برای فیلدهای دیت و دیت تایم. مقدار دقیق روز را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا ۳۰ را می گیرد.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__week=<span class="hljs-number">52</span>)
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__week__gte=<span class="hljs-number">32</span>, pub_date__week__lte=<span class="hljs-number">38</span>)
+</code></pre>
+<hr>
+<h2 id="week_day">week_day</h2>
+<p>برای فیلدهای دیت و دیت تایم. مقدار دقیق روز هفته را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا 7 را می گیرد. که یک برای یک شنبه و هفت برای شنبه.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__week_day=<span class="hljs-number">2</span>)
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__week_day__gte=<span class="hljs-number">2</span>)
+</code></pre>
+<hr>
+<h2 id="quarter">quarter</h2>
+<p>برای فیلدهای دیت و دیت تایم. مقدار دقیق فصل را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا ۴ را می گیرد.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__quarter=<span class="hljs-number">2</span>)
+</code></pre>
+<hr>
+<h2 id="time">time</h2>
+<p>برای فیلد های دیت تایم است و مقدار را به زمان تبدیل می کند.از لوکاپ زنجیره ای پشتیبانی می کند. و یک <strong>datetime.time</strong> می گیرد.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__time=datetime.time(<span class="hljs-number">14</span>, <span class="hljs-number">30</span>))
+Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__time__range=(datetime.time(<span class="hljs-number">8</span>), datetime.time(<span class="hljs-number">17</span>)))
+</code></pre>
+<hr>
+<h2 id="hour">hour</h2>
+<p>برای فیلدهای دیت و دیت تایم. مقدار دقیق ساعت را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا ۲۳ را می گیرد.</p>
+<pre><code class="language-python">Event.objects.<span class="hljs-built_in">filter</span>(timestamp__hour=<span class="hljs-number">23</span>)
+Event.objects.<span class="hljs-built_in">filter</span>(time__hour=<span class="hljs-number">5</span>)
+Event.objects.<span class="hljs-built_in">filter</span>(timestamp__hour__gte=<span class="hljs-number">12</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;hour&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">timestamp</span>) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;23&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;hour&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">time</span>) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;5&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;hour&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">timestamp</span>) <span class="hljs-operator">&gt;=</span> <span class="hljs-string">&#x27;12&#x27;</span>;
+</code></pre>
+<hr>
+<h2 id="minute">minute</h2>
+<p>برای فیلدهای دیت و دیت تایم. مقدار دقیق دقیقه را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا 59 را می گیرد.</p>
+<pre><code class="language-python">Event.objects.<span class="hljs-built_in">filter</span>(timestamp__minute=<span class="hljs-number">29</span>)
+Event.objects.<span class="hljs-built_in">filter</span>(time__minute=<span class="hljs-number">46</span>)
+Event.objects.<span class="hljs-built_in">filter</span>(timestamp__minute__gte=<span class="hljs-number">29</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;minute&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">timestamp</span>) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;29&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;minute&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">time</span>) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;46&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;minute&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">timestamp</span>) <span class="hljs-operator">&gt;=</span> <span class="hljs-string">&#x27;29&#x27;</span>;
+</code></pre>
+<hr>
+<h2 id="second">second</h2>
+<p>برای فیلدهای دیت و دیت تایم. مقدار دقیق ثانیه را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا 59 را می گیرد.</p>
+<pre><code class="language-python">Event.objects.<span class="hljs-built_in">filter</span>(timestamp__second=<span class="hljs-number">31</span>)
+Event.objects.<span class="hljs-built_in">filter</span>(time__second=<span class="hljs-number">2</span>)
+Event.objects.<span class="hljs-built_in">filter</span>(timestamp__second__gte=<span class="hljs-number">31</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;second&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">timestamp</span>) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;31&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;second&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">time</span>) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;2&#x27;</span>;
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-string">&#x27;second&#x27;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-type">timestamp</span>) <span class="hljs-operator">&gt;=</span> <span class="hljs-string">&#x27;31&#x27;</span>;
+</code></pre>
+<hr>
+<h2 id="isnull">isnull</h2>
+<p>مقادیر <strong>Ttue</strong> یا <strong>False</strong> را می گیرد که معادل کوئری اس کیو الی <strong>IS NULL</strong> و <strong>IS NOT NULL</strong> به ترتیب است.</p>
+<pre><code class="language-python">Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__isnull=<span class="hljs-literal">True</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> pub_date <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span>;
+</code></pre>
+<hr>
+<h2 id="regex">regex</h2>
+<p>عبارت حساس به حروف رگیولار</p>
+<pre><code class="language-python">Entry.objects.get(title__regex=<span class="hljs-string">r&quot;^(An?|The) +&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> title REGEXP <span class="hljs-type">BINARY</span> <span class="hljs-string">&#x27;^(An?|The) +&#x27;</span>; <span class="hljs-comment">-- MySQL</span>
+
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> REGEXP_LIKE(title, <span class="hljs-string">&#x27;^(An?|The) +&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>); <span class="hljs-comment">-- Oracle</span>
+
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> title <span class="hljs-operator">~</span> <span class="hljs-string">&#x27;^(An?|The) +&#x27;</span>; <span class="hljs-comment">-- PostgreSQL</span>
+
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> title REGEXP <span class="hljs-string">&#x27;^(An?|The) +&#x27;</span>; <span class="hljs-comment">-- SQLite</span>
+</code></pre>
+<hr>
+<h2 id="iregex">iregex</h2>
+<p>حالت غیر حساس رگیولار</p>
+<pre><code class="language-python">Entry.objects.get(title__iregex=<span class="hljs-string">r&quot;^(an?|the) +&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> title REGEXP <span class="hljs-string">&#x27;^(an?|the) +&#x27;</span>; <span class="hljs-comment">-- MySQL</span>
+
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> REGEXP_LIKE(title, <span class="hljs-string">&#x27;^(an?|the) +&#x27;</span>, <span class="hljs-string">&#x27;i&#x27;</span>); <span class="hljs-comment">-- Oracle</span>
+
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> title <span class="hljs-operator">~</span><span class="hljs-operator">*</span> <span class="hljs-string">&#x27;^(an?|the) +&#x27;</span>; <span class="hljs-comment">-- PostgreSQL</span>
+
+<span class="hljs-keyword">SELECT</span> ... <span class="hljs-keyword">WHERE</span> title REGEXP <span class="hljs-string">&#x27;(?i)^(an?|the) +&#x27;</span>; <span class="hljs-comment">-- SQLite</span>
 </code></pre>
 
         

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Pickling QuerySets</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="pickling-querysets">Pickling QuerySets</h1>
+<p>اگر یک کوئری ست پیکل شود نتیجه را مجبور به لود شدن در دیتابیس میکند تا آماده پیکل شدن شود.</p>
+<hr>
+<h2 id="about-python-pickling">About python pickling</h2>
+<p>ماژول <strong>pickle</strong> در پایتون در درجه اول برای سریالایز و دی سریالایز ساختارهای آبجکت پایتونی استفاده می شود. در موارد زیر استفاده می شود:</p>
+<hr>
+<p><strong>Persisting Program State:</strong></p>
+<p>از pickle می‌توان برای ذخیره داده‌های استیت برنامه در دیسک استفاده کرد تا بتواند از جایی که پس از راه‌اندازی مجدد متوقف شده است، ادامه دهد.</p>
+<hr>
+<p><strong>Inter-Process Communication:</strong></p>
+<p>در یک سیستم چند هسته ای یا توزیع شده، از pickle می توان برای ارسال داده های پایتون از طریق یک اتصال TCP
+استفاده کرد.</p>
+<hr>
+<p><strong>Storing Objects in a Database:</strong></p>
+<p>از pickle می توان برای ذخیره اشیاء پایتون در پایگاه داده استفاده کرد.</p>
+<hr>
+<p><strong>Converting Python Objects to Strings:</strong></p>
+<p>از pickle می توان برای تبدیل یک شی پایتون دلخواه به رشته استفاده کرد تا بتوان از آن به عنوان کلید دیکشنری استفاده کرد. این اغلب برای اهداف ذخیره سازی و حفظ کردن استفاده می شود.
+ـــ
+<strong>Distributed Computing:</strong></p>
+<p>هنگام انجام محاسبات توزیع شده و ارسال داده های پیچیده بین ماشین ها، ماژول pickle فرآیند را با سریالایز اطلاعات برای انتقال از طریق شبکه ساده می کند.</p>
+<blockquote>
+<p>با این حال، برخی از نگرانی های امنیتی مرتبط با pickle وجود دارد. شما هرگز نباید یک رشته را از یک منبع نامعتبر unpickle کنید، زیرا یک pickle با دقت ساخته شده می تواند کد دلخواه را در سیستم شما اجرا کند.</p>
+</blockquote>
+<hr>
+<p>اگر از  value_list() استفاده شود و پیکل صورت گیرد تبدیل به values() خواهد شد.</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> pickle
+<span class="hljs-meta">&gt;&gt;&gt; </span>qs = Blog.objects.values_list(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>qs
+&lt;QuerySet [(<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;Beatles Blog&#x27;</span>)]&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span>reloaded_qs = Blog.objects.<span class="hljs-built_in">all</span>()
+<span class="hljs-meta">&gt;&gt;&gt; </span>reloaded_qs.query = pickle.loads(pickle.dumps(qs.query))
+<span class="hljs-meta">&gt;&gt;&gt; </span>reloaded_qs
+&lt;QuerySet [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;name&#x27;</span>: <span class="hljs-string">&#x27;Beatles Blog&#x27;</span>}]&gt;
+</code></pre>
+<p>دقت باید کرد که هر ورژن از جنگو پیکل خاص خود را دارد و نمی توان یک پیکل را باهم شییر کنند.</p>
+
+        
+        
+    </body>
+    </html>

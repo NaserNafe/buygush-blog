@@ -64,11 +64,13 @@ AttributeError: <span class="hljs-string">&quot;Manager isn&#x27;t accessible vi
 <p>منیجر اصلی ترین منبع کوئری ست ها هستند. برای مثال
 Blog.objects.all()
 یک کوئری ست را برمی گرداند که شامل همه اشیای تیبل بلاگ است.</p>
+<hr>
 <h2 id="retrieving-all-objects">Retrieving all objects</h2>
 <p>راحترین راه بازخوانی اطلاعات یک جدول از دیتابیس گرفتن همه ردیف های آن است. برای انجام آنهمانطور که گفتیم از متد all() استفاده میشود.</p>
 <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>all_entries = Entry.objects.<span class="hljs-built_in">all</span>()
 </code></pre>
 <p>متد ال یک کوئری ست که همه اشیای جدول را برمیگرداند.</p>
+<hr>
 <h2 id="retrieving-specific-objects-with-filters">Retrieving specific objects with filters</h2>
 <p>از طریق تعریف فیلترها می توان به یک آبجگت خاص در دیتابیس دسترسی پیدا کرد.</p>
 <p>دو روش معمول در پالایش  یک کوئری ست  عبارتند از:</p>
@@ -82,6 +84,44 @@ Entry.objects.<span class="hljs-built_in">filter</span>(pub_date__year=<span cla
 <span class="hljs-keyword">or</span>
 Entry.objects.<span class="hljs-built_in">all</span>().<span class="hljs-built_in">filter</span>(pub_date__year=<span class="hljs-number">2006</span>)
 </code></pre>
+<blockquote>
+<p><a href="./fieldsLookup.html">lookup-reference لیست کامل لوکاپ ها</a></p>
+</blockquote>
+<hr>
+<h1 id="chaining-filters">Chaining filters</h1>
+<p>نتیجه پالایش شده یک کوئری ست خود میتواند کوئری ست باشد که امکان پالایش زنجیره ای را امکان پذیر میکند.</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>Entry.objects.<span class="hljs-built_in">filter</span>(headline__startswith=<span class="hljs-string">&quot;What&quot;</span>).exclude(
+<span class="hljs-meta">... </span>    pub_date__gte=datetime.date.today()
+<span class="hljs-meta">... </span>).<span class="hljs-built_in">filter</span>(pub_date__gte=datetime.date(<span class="hljs-number">2005</span>, <span class="hljs-number">1</span>, <span class="hljs-number">30</span>))
+</code></pre>
+<hr>
+<h1 id="filtered-querysets-are-unique">Filtered QuerySets are unique</h1>
+<p>هر بار که یک کوئری ست پالایش میشود یک کوئری جدید ساخته می شود و هیچ ارتباطی با قبلی ندارد. هر کدام جداگانه ذخیره و دوباره استفاده می شوند.</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>q1 = Entry.objects.<span class="hljs-built_in">filter</span>(headline__startswith=<span class="hljs-string">&quot;What&quot;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>q2 = q1.exclude(pub_date__gte=datetime.date.today())
+<span class="hljs-meta">&gt;&gt;&gt; </span>q3 = q1.<span class="hljs-built_in">filter</span>(pub_date__gte=datetime.date.today())
+</code></pre>
+<p>مقدار q1 توسط هیچ کدام از دو کوئری بعدی تاثیر نمی گیرد.اما دو کوئری بعدی با کوئری اول ادغام شده اند.</p>
+<hr>
+<h1 id="querysets-are-lazy">QuerySets are lazy</h1>
+<p>ایجاد کوئری ست ارتباطی با دیتابیس ندارد. تا زمانی که ارزش یابی نشده است اجرا نمی شود.</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>q = Entry.objects.<span class="hljs-built_in">filter</span>(headline__startswith=<span class="hljs-string">&quot;What&quot;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>q = q.<span class="hljs-built_in">filter</span>(pub_date__lte=datetime.date.today())
+<span class="hljs-meta">&gt;&gt;&gt; </span>q = q.exclude(body_text__icontains=<span class="hljs-string">&quot;food&quot;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(q)
+</code></pre>
+<p>در مثال فوق به ظاهر سه بار به دیتابیس هیت زده ایم در حالی که فقط یکبار این اتفاق می افتد.</p>
+<hr>
+<h2 id="retrieving-a-single-object-with-get">Retrieving a single object with get()</h2>
+<p>filter() همیشه یه کوئری ست را می دهد حتی وقتی که یک مقدار مچ شود. وقتی که می دانید که فقط یک مقدار با کوئری ما مچ است میشود از get() که متدی از داخل منیجر است استفاده کرد. این متد مقدار را مستقیما بر می گرداند.</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>one_entry = Entry.objects.get(pk=<span class="hljs-number">1</span>)
+</code></pre>
+<blockquote>
+<p>همانند فیلتر نویسی همه موارد لوکاپ اینجا هم کاربرد دارد.
+متد گت اگر یک مقدار را پیدا نکند اکسپشن <strong>DoesNotExist</strong> و اگر بیش از یک مقدار را پیدا کند ارور <strong>MultipleObjectsReturned</strong> را رییز خواهد کرد.</p>
+</blockquote>
+<hr>
+<h2 id=""></h2>
 
         
         

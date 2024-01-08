@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>When QuerySets are evaluated</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="when-querysets-are-evaluated">When QuerySets are evaluated</h1>
+<p>کی یک کوئری ست ارزش گذاری یا مقدار دهی می شود.</p>
+<p>اساسا یک کوئری ست می تواند ساخته شود، فیلتر شود، اسلایس شود بدون اینکه به دیتابیس سری بزند. هیچ فعالیتی در دیتابیس رخ نمی دهد تا زمانی که کاری برای مقدار دهی انجام شود.
+روش های مقدار دهی یک کويری ست عبارتند از:</p>
+<h2 id="itration">Itration</h2>
+<p>یک کوئری ست قابلیت پیمایش را دارد. و در شروع اولین پیمایش معادل اسکیو الی آن اجرا خواهد شد.</p>
+<pre><code class="language-python"><span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> Entry.objects.<span class="hljs-built_in">all</span>():
+    <span class="hljs-built_in">print</span>(e.headline)
+</code></pre>
+<hr>
+<h2 id="asynchronous-iteration">Asynchronous iteration</h2>
+<p>همچنین  می توان از پیمایش آسینک استفاده کرد.</p>
+<pre><code class="language-python"><span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> Entry.objects.<span class="hljs-built_in">all</span>():
+    results.append(e)
+</code></pre>
+<p>هر دو پیمایش آسینک و سینک کوئری ست از یک زیربنای کش یکسان اسنفاده می کنند.</p>
+<hr>
+<h2 id="slicing">slicing</h2>
+<p>یک کوئری ست را می توان با استفاده از اسلاسینگ لیست پایتون اسلایس کرد. اما این اسلایسینگ کوئری ست یک کوئری ست مقدار دهی نشده بر می گرداند. اما اگر پارامتر ستپ <strong>step</strong>  مقدار دهی شود یک لیست مقدار دهی شده را بر خواهد گرداند.</p>
+<blockquote>
+<p>باید به این نکته دقت کرد که کوئری ستی که اسلایسینگ بدون استپ برمیگرداند را نمی توان دستکاری دوباره مثل فیلتر یا اوردر کرد. چون به اس کیو ال درست ترجمه نخواهد شد.</p>
+</blockquote>
+<hr>
+<h2 id="picklingcashing">Pickling/Cashing</h2>
+<p>برای درک بهتر <a href="./picklingQuerySets.html"><strong>Pickling QuerySet</strong></a> به قسمت پکلینگ مراجعه شود.
+اما در اینجا توجه کنید که نتیجه پکلینگ مستقیم از دیتابیس خوانده می شود.</p>
+<hr>
+<h2 id="repr">repr()</h2>
+<p>وقتی متد ریپر روی یک کوئری ست فراخوانی می شود کوئری مقدار دهی خواهد شد.
+این موضوع جهت سادگی کار در پایتون اینتر اکتیو است تا همانجا اطلاعات مشاهده شود.</p>
+<hr>
+<h2 id="len">len()</h2>
+<p>یک کوئری ست مقدار دهی می شود اکر متد لن روی آن صدا زده شود.
+همانطور که انتظار می رود طول نتیجه را باز می گرداند.</p>
+<blockquote>
+<p>دقت شود که اگر صرفا فقط تعداد آبجکت ها نیاز باشد بهتر است از متد count() استفاده شود.</p>
+</blockquote>
+<hr>
+<h2 id="list">list()</h2>
+<p>کوئری ست را ملزم به مقدار گیری میکند.</p>
+<pre><code class="language-python">entry_list = <span class="hljs-built_in">list</span>(Entry.objects.<span class="hljs-built_in">all</span>())
+</code></pre>
+<hr>
+<h2 id="bool">bool()</h2>
+<p>تست کردن یک کوئری ست در کانتکس های بولینی مثل <strong>bool()</strong> , <strong>or</strong>, <strong>and</strong> و با در عبارات شرطی <strong>if</strong> باعث مقدار گیری خواهد شد و در صورت وجود حداقل یک مقدار مقدار <strong>True</strong> پاس داده خواهد شد.</p>
+<pre><code class="language-python"><span class="hljs-keyword">if</span> Entry.objects.<span class="hljs-built_in">filter</span>(headline=<span class="hljs-string">&quot;Test&quot;</span>):
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;There is at least one Entry with the headline Test&quot;</span>)
+</code></pre>
+<blockquote>
+<p>بهتر است برای چک کردن موجود بودن یا نبودن یک مقدار از <strong>exists()</strong> استفاده شود.</p>
+</blockquote>
+
+        
+        
+    </body>
+    </html>

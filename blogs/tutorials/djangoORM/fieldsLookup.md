@@ -411,7 +411,14 @@ SELECT ... WHERE EXTRACT('second' FROM timestamp) >= '31';
 
 ## isnull
 
-مقادیر **Ttue** یا **False** را می گیرد که معادل کوئری اس کیو الی **IS NULL** و **IS NOT NULL** به ترتیب است.
+مقادیر **Ttue** یا **False** را می گیرد که معادل کوئری اس کیو الی **IS NULL** و **IS NOT NULL** به ***
+
+ - [ ] 
+ - [ ] 
+
+ترتیب
+
+*** است.
 
 ```python
 Entry.objects.filter(pub_date__isnull=True)
@@ -455,7 +462,12 @@ SELECT ... WHERE REGEXP_LIKE(title, '^(an?|the) +', 'i'); -- Oracle
 
 SELECT ... WHERE title ~* '^(an?|the) +'; -- PostgreSQL
 
-SELECT ... WHERE title REGEXP '(?i)^(an?|the
+**gcngct** **
+
+# SELECT
+
+** ... WHERE title REGEXP '(?i)^(an?|the
+```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI4MTIzNjU0N119
+eyJoaXN0b3J5IjpbMjQ4NTY1Mjg0XX0=
 -->

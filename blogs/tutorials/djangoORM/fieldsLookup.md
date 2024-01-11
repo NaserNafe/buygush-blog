@@ -390,7 +390,9 @@ SELECT ... WHERE EXTRACT('minute' FROM timestamp) >= '29';
 ```
 
 ---
+Markdown converts text to HTML.
 
+*[HTML]: HyperText Markup Language
 ## second
 
 برای فیلدهای دیت و دیت تایم. مقدار دقیق ثانیه را بر می گرداند و از حالت زنجیره ای پشتیبانی می کند. ورودی یک اینتجر از ۱ تا 59 را می گیرد.
@@ -469,5 +471,5 @@ SELECT ... WHERE title ~* '^(an?|the) +'; -- PostgreSQL
 ** ... WHERE title REGEXP '(?i)^(an?|the
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjQ4NTY1Mjg0XX0=
+eyJoaXN0b3J5IjpbLTEwMTMzOTk4NTIsMjQ4NTY1Mjg0XX0=
 -->

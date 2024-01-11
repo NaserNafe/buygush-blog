@@ -455,5 +455,7 @@ SELECT ... WHERE REGEXP_LIKE(title, '^(an?|the) +', 'i'); -- Oracle
 
 SELECT ... WHERE title ~* '^(an?|the) +'; -- PostgreSQL
 
-SELECT ... WHERE title REGEXP '(?i)^(an?|the) +'; -- SQLite
-```
+SELECT ... WHERE title REGEXP '(?i)^(an?|the
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTI4MTIzNjU0N119
+-->

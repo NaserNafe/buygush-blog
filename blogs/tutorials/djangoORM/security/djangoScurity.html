@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Security in Django</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="security-in-django">Security in Django</h1>
+<p>این  قسمت یک نمای کلی از ویژگی های امنیتی جنگو است. این شامل توصیه هایی در مورد ایمن سازی یک سایت مجهز به جنگو است.</p>
+<hr>
+<h2 id="host-header-validation">Host header validation</h2>
+<p>جنگو از هدر Host ارائه شده توسط مشتری برای ساخت URL در موارد خاص استفاده می کند. در حالی که این مقادیر برای جلوگیری از حملات Cross Site Scripting پاکسازی می‌شوند، یک مقدار Host جعلی می‌تواند برای جعل درخواست <strong>Cross-Site Request Forgery</strong>، حملات مسمومیت حافظه پنهان <strong>cache poisoning</strong>، و لینک‌های مسموم‌سازی در ایمیل‌ها <strong>poisoning links in emails</strong> استفاده شود.</p>
+<p>از آنجایی که حتی پیکربندی‌های به ظاهر امن سرور وب نیز مستعد ابتلا به هدرهای جعلی Host هستند، جنگو هدرهای میزبان را بر اساس تنظیمات <strong>ALLOWED_HOSTS</strong> در متد <strong>django.http.HttpRequest.get_host()</strong> ولیدیت می‌کند.</p>
+<p>این اعتبارسنجی فقط از طریق <strong>get_host()</strong> انجام می شود; اگر کد شما مستقیماً از request.META به هدر Host دسترسی پیدا کند، این حفاظت امنیتی را دور می‌زنید.</p>
+<p>برای جزئیات بیشتر به مستندات کامل ALLOWED_HOSTS مراجعه کنید.</p>
+<p>علاوه بر این، جنگو از شما می‌خواهد که در صورت نیاز به پیکربندی، پشتیبانی از هدر <strong>X-Forwarded-Host</strong> (از طریق تنظیمات <strong>USE_X_FORWARDED_HOST</strong>) را به صراحت فعال کنید.</p>
+<hr>
+
+            
+            
+        </body>
+        </html>

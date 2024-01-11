@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Query Expressions &#x639;&#x628;&#x627;&#x631;&#x627;&#x62a; &#x6a9;&#x648;&#x626;&#x631;&#x6cc;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="query-expressions-عبارات-کوئری">Query Expressions عبارات کوئری</h1>
+<p>عبارات کوئری یک مقدار یا یک محاسبه را توصیف می کند که میتوان به عنوان بخشی از یک <strong>update, create, filter, order by, annotation</strong> و یا <strong>aggregate</strong> استفاده کرد.
+وقتی که  خروجی یک عبارت مقدار بولیین است ممکن است مستقیم در فیلتر استفاده شود.
+تعدادی عبارت از پیش ساخته شده وجود دارد که در زیر لیست می شود، می توانند برای کويری نوشتن کمک کنند.
+این عبارات می توانند ترکیب شوند یا در بعضی موارد برای ساخت کوئری پیچیده زنجیر شوند.</p>
+<hr>
+<h2 id="supported-arithmetic-عملیات-ریاضی">Supported arithmetic عملیات ریاضی</h2>
+<p>جنگو از عملیات ریاضی مثل منفی کردن، جمع و تفریق، ضرب و تقسیم،باقیمانده تقسیم و توان رسانی را ساپورت می کند.</p>
+<hr>
+<h2 id="output-field-نوع-فیلد-خروجی">Output field نوع فیلد خروجی</h2>
+<p>بسیاری از عبارات ذکر شده در زیر پارامتری آپشنال به اسم <strong>output_field</strong> دارند. که در صورت دادن این آپشن جنگو مقدار را بعد از بازخوانی از دیتابیس با تایپ لود خواهد کرد.</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> django.db.models <span class="hljs-keyword">import</span> FloatField, F, Sum
+total_group = Sum(F(<span class="hljs-string">&#x27;total_sold&#x27;</span>)*F(<span class="hljs-string">&#x27;final_price&#x27;</span>), output_field=FloatField())
+</code></pre>
+<p><strong>output_field</strong> اینستنسی از مدل فیلد را میگیرد مثل:
+<strong>IntegerField() یا BooleanField()</strong>.
+معمولا این فیلد نیازی به هیچ آرگیومنتی ندارد مثل <strong>max_length</strong> چون این ولیدیشن در مقدار خروجی اعمال نخواهد شد.</p>
+<p><strong>output_field</strong> فقط زمانی ضروری خواهد شد که جنگو نمی تواند تایپ فیلد خروجی را نداند. مثا عبارات پیچیده که چندین فیلد ترکیب شده اند. مثل جمع یک <strong>DecimalField()</strong> و یک <strong>FloatField()</strong> به یک <strong>output_field</strong>نیاز داردنمی داند خروجی چیست</p>
+<hr>
+<h1 id="built-in-expressions-عبارات-از-پیش-ساخته-شده">Built-in Expressions عبارات از پیش ساخته شده</h1>
+<blockquote>
+<p>این عبارات پر <strong>django.db.models.expressions and django.db.models.aggregates</strong> تعریف شده اند ام جهت سادگی از <strong>django.db.models</strong> هم قابل دسترسی هستند.
+ـــ</p>
+</blockquote>
+<h2 id="f-expressions">F() expressions</h2>
+<p>آبجکت کلاس اف بیانگر مقدار فیلد مدل یا مقدار تغییر یافته مدل و یا انوتیت شده یک ستون است.
+اف ارجاع به مقدار فیلد یک مدل و اجرای عملیات دیتابیسی با استفاده کردن آنها بدون اینکه مجبور شود اطلاعات را خارج از دیتابیس بیاورد و به حافظه پایتون ارسال کند.</p>
+<p>بجای آن، جنگو از آبجکت <strong>اف</strong> برای تولید عبارت اس کیو الی که عملیات مورد نیاز در سطح دیتابیس را توصیف می کند استفاده می کند.</p>
+<p>با توجه به مثال زیر در حالت نرمال به شکل زیر عمل می شود.</p>
+<pre><code class="language-python"><span class="hljs-comment"># Tintin filed a news story!</span>
+reporter = Reporters.objects.get(name=<span class="hljs-string">&quot;Tintin&quot;</span>)
+reporter.stories_filed += <span class="hljs-number">1</span>
+reporter.save()
+</code></pre>
+<p>در اینجابا استفاده از عملیات پایتونی بر روی اطلاعاتی که از دیتابیس استخراج و به مموری  پایتون انتقال داده شده است اطلاعات دیتابیس تغیر و به دیتابیس بر گردانده می شود.
+اما در عوض می توان به شکل زیر انجام داد.</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> django.db.models <span class="hljs-keyword">import</span> F
+
+reporter = Reporters.objects.get(name=<span class="hljs-string">&quot;Tintin&quot;</span>)
+reporter.stories_filed = F(<span class="hljs-string">&quot;stories_filed&quot;</span>) + <span class="hljs-number">1</span>
+reporter.save()
+</code></pre>
+<p>گرچه <strong>reporter.stories_filed = F('stories_filed') + 1</strong> شبیه یک اساینمنت معمولی  مقدار پایتون به انستنس اتریبیوت نظر می رسد. در حقیقت یک ساختار اسکیو الی است که یک عملیاتی را در دیتابیس توصیف می کند.</p>
+<p>وقتی که جنگو با اینستنسی از <strong>اف</strong> مواجه می شود، عملیات پایتونی را برای ایجاد یک عبارت اسکیو الی کپسوله شده جایگزین می کند.
+در مثال بالا دیتابیس را برای افزایش یک فیلد دیتابیس که با <strong>reporter.stories_filed</strong> نمایش داده می شود سازماندهی می کند.</p>
+<p>هر مقداری که  در <strong>reporter.stories_filed</strong> است یابود پایتون هرگز در مورد ان خبردار نمی شود.
+با آن کلا فقط دیتابیس سروکله می زند.
+همه چیزی که پایتون از طریق <strong>اف</strong> انجام می دهد ایجاد سنتکس اسکیوالی برای ارجاع به فیلد و تعریف عملیات روی آن است.
+برای دسترسی به مقدار ذخیره شده جدید به این شکل این است که آبجکت پایتونی باید دوباره بارگیری شود.</p>
+<pre><code class="language-python">reporter = Reporters.objects.get(pk=reporter.pk)
+<span class="hljs-comment"># Or, more succinctly:</span>
+reporter.refresh_from_db()
+</code></pre>
+<p>علاوه بر استفاده شدن در عملیات ها روی یک اینستنس، <strong>اف</strong> را می شود روی کوئری ست  با <strong>update()</strong> روی چند ابجکت اینستنس استفاده کرد. این دو کوئری <strong>get()</strong> و <strong>save()</strong> بالا را به یک کوئری کاهش می دهد.</p>
+<pre><code class="language-python">reporter = Reporters.objects.<span class="hljs-built_in">filter</span>(name=<span class="hljs-string">&quot;Tintin&quot;</span>)
+reporter.update(stories_filed=F(<span class="hljs-string">&quot;stories_filed&quot;</span>) + <span class="hljs-number">1</span>)
+</code></pre>
+<p>همچنین با استفاده از <strong>update()</strong>  مقدار فیلد روی چند آبجکت را ارتقاء داد که می تواند بسیار سریع تر از انتقال همه به پایتون و پیمایش روی اونها و ارتقاء مقادیر فیلد ها و ذخیره دوباره آنها در دیتابیس.</p>
+<pre><code class="language-python">Reporter.objects.update(stories_filed=F(<span class="hljs-string">&quot;stories_filed&quot;</span>) + <span class="hljs-number">1</span>)
+</code></pre>
+<p>در مثال بالایی روی <strong>Tintin</strong> فیلتر شده است اما در مثال پایینی روی کل فیلد <strong>stories_filed</strong> ارتقاء می دهد.</p>
+<blockquote>
+<p>لذا <strong>اف</strong> برای افزایش کارایی مزایای به کمک موارد زیر دارد.</p>
+<ol>
+<li>سر کار با دیتابیس بجای پایتون.</li>
+<li>کاهش تعداد کوئری ها که بعضی از عملیات نیاز دارند.</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="avoiding-race-conditions-using-f-اجتناب-از-ریس-کاندیشن-با-استفاده-از-اف">Avoiding race conditions using F() اجتناب از ریس کاندیشن با استفاده از <strong>اف</strong></h2>
+<p>یکی دیگر از مزیت های <strong>اف</strong> چون با دیتابیس کار میکند بجای پایتون این است که فیلدها را آپدیت میکند بدپن اینکه ریس کاندیشن رخ دهد.
+هر کدام از <strong>thread</strong> ترت های پایتون زمانی که روی یک مقدار فیلد کار میکنند ممکن است یک ترت ارتقاء را نجام دهد ولی ترت دیگری خبردار  نباشد و دوباره مقدار افزایش یافته را دوباره ارتقاء دهد.
+اما اگر دیتابیس مسئول آپدیت باشد بجای منتظر ماند برای <strong>save() or update()</strong> که اجرا شوند همان لحظه بازخوانی عملیات انجام میشود. و جلوی ریس کاندیشن گرفته می شود.</p>
+<hr>
+<h2 id="f-assignments-persist-after-modelsave-اف-حتی-بعد-از-سیو-مدل-هم-به-قوت-خود-باقی-می-ماند">F() assignments persist after Model.save() اف حتی بعد از سیو مدل هم به قوت خود باقی می ماند.</h2>
+<p>آبجکت اف بعد از صدا زدن سیو دوباره میماند و در هر صدا زدن دوباره متد سیو مکررا اعمال می شود.</p>
+<pre><code class="language-python">reporter = Reporters.objects.get(name=<span class="hljs-string">&quot;Tintin&quot;</span>)
+reporter.stories_filed = F(<span class="hljs-string">&quot;stories_filed&quot;</span>) + <span class="hljs-number">1</span>
+reporter.save()
+
+reporter.name = <span class="hljs-string">&quot;Tintin Jr.&quot;</span>
+reporter.save()
+</code></pre>
+<p>مقدار <strong>stories_filed</strong> دو بار آپدیت خواهد شد. اگر مقدار اولیه ۱ باشد مقدار نهایی به ۳ تغییر خواهد یافت.
+این ماندگاری به وسیله بارگیری دوباره آبجکت مدل بعد از فراخوانی متد سیو به کمک <strong>refresh_from_db()</strong> قابل اجتناب است.</p>
+
+            
+            
+        </body>
+        </html>

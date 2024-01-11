@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&ast;&ast;Settings&ast;&ast;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="settings"><strong>Settings</strong></h1>
+<hr>
+<ul>
+<li>
+<p><a href="#core-settings">Core Settings</a></p>
+</li>
+<li>
+<p><a href="">Auth</a></p>
+</li>
+<li>
+<p><a href="">Messages</a></p>
+</li>
+<li>
+<p><a href="">Sessions</a></p>
+</li>
+<li>
+<p><a href="">Sites</a></p>
+</li>
+<li>
+<p><a href="">Static Files</a></p>
+</li>
+<li>
+<p><a href="">Core Settings Topical Index</a></p>
+</li>
+</ul>
+<hr>
+<h1 id="core-settings"><a name="core-settings">Core Settings</a></h1>
+<p>اینجا لیستی از ستینگ های موجود در هسته جنگو ومقادیر دیفالت آنها است.
+تنظیمات ارائه شده توسط کانتریب در اینجا لیست شده است.</p>
+<hr>
+<h2 id="absolute_url_overrides">ABSOLUTE_URL_OVERRIDES</h2>
+<p><strong>Default {}(Empty dictionary)</strong></p>
+<p>یک دیکشنری مپ کننده <strong>&quot;app_label.model_name&quot;</strong> (که آدرس ابسلوت مدلی در پروژه جنگو است) بر روی فانکشنی (که یک آبجکتی از کلاس همان مدل را می گیرد و یک استرینگ ریترن می کند که نمایانگر آدرس ابسلوت آن آبجکت است) می باشد.</p>
+<pre><code class="language-python">ABSOLUTE_URL_OVERRIDES = {
+    <span class="hljs-string">&quot;blogs.blog&quot;</span>: <span class="hljs-keyword">lambda</span> o: <span class="hljs-string">&quot;/blogs/%s/&quot;</span> % o.slug,
+    <span class="hljs-string">&quot;news.story&quot;</span>: <span class="hljs-keyword">lambda</span> o: <span class="hljs-string">&quot;/stories/%s/%s/&quot;</span> % (o.pub_year, o.slug),
+}
+</code></pre>
+<blockquote>
+<p>در اینجا اسم مدل حتما باید با حروف کوچک باشند حتی اگر کلاس مدل با حروف بزرگ شروع شده باشد.</p>
+</blockquote>
+<p>در کی ولییو اولی آدرس ابسلوت بدین ترتیب می شود، از اپ بلاگز مدل بلاگ  <strong>/blogs/slug</strong>. اسلاگ را از آبجکت مدل تعریف شده به شکل اتوماتیک میگیرد.
+بدین شکل می شود متد <strong>get_absolute_url()</strong> که در ویو ها و تمپلیت ها کاربرد دارد را اورراید کلی کرد.</p>
+<hr>
+<h2 id="admins">ADMINS</h2>
+<p><strong>Default: [] (Empty list)</strong>
+یک لیست از اشخاصی که می توانند نوتیفیکیشن های اررور را دریافت کنند.</p>
+<p>وقتی مقدار <strong>DEBUG</strong> برابر <strong>False</strong> باشد و <strong>AdminEmailHandler</strong> در قسمت <strong>LOGGING</strong> تنظیم شده باشد.(اتوماتیک تنظیم است) جنگو به این اشخاص ایمیل جزئیات اررور ها را در چرخه <strong>request/response</strong> می فرستد.</p>
+<p>هر آیتم در این لیست باید یک تاپل از نام کامل وآدرس ایمیل شخص باشد.</p>
+<pre><code class="language-python">[(<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;john@example.com&quot;</span>), (<span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;mary@example.com&quot;</span>)]
+</code></pre>
+<hr>
+<h2 id="allowed_hosts">ALLOWED_HOSTS</h2>
+<p><strong>Default: [] (Empty list)</strong></p>
+<p>فهرستی از رشته‌ها که نشان دهنده نام‌های هاست/دامین است که جنگو می‌تواند ارائه کند. این یک اقدام امنیتی برای جلوگیری از حملات <strong>HTTP Host header attacks</strong> است، که حتی در بسیاری از پیکربندی‌های وب سرور به ظاهر امن امکان‌پذیر است.</p>
+<p>مقادیر موجود در این لیست می‌توانند نام‌های کاملاً واجد شرایط باشند (مانند «<a href="http://www.example.com">www.example.com</a>»)، در این صورت دقیقاً با <strong>هاست هدر</strong> ریکوست مطابقت داده می‌شوند (بدون احتساب پورت و غیر حساس به بزرگی حروف).</p>
+<p>مقداری که با نقطه شروع می‌شود می‌تواند به‌عنوان علامت عام زیردامنه استفاده شود: «.example.com» با <a href="http://example.com">example.com</a>، <a href="http://www.example.com">www.example.com</a> و هر زیر دامنه دیگری از <a href="http://example.com">example.com</a> مطابقت دارد.</p>
+<p>مقدار '*' با هر چیزی مطابقت دارد. در این مورد، شما مسئول هستید تا اعتبار خود را از هدر Host ارائه دهید (شاید در یک میدل ور؛ اگر چنین است، این میدل ور باید ابتدا در MIDDLEWARE فهرست شود).</p>
+<p>جنگو همچنین نام دامنه کاملاً واجد شرایط (FQDN) هر ورودی را اجازه می دهد. برخی از مرورگرها دارای یک نقطه انتهایی در سربرگ میزبان هستند که جنگو هنگام انجام اعتبار سنجی میزبان آن را حذف می کند.</p>
+<p>اگر هدر Host (یا X-Forwarded-Host اگر USE_X_FORWARDED_HOST فعال باشد) با هیچ مقداری در این لیست مطابقت نداشته باشد، متد <strong>django.http.HttpRequest.get_host()</strong>  اررور <strong>SuspiciousOperation</strong> را رییز میکند.</p>
+<p>وقتی DEBUG ترو است و ALLOWED_HOSTS خالی است، هاست در برابر ['.localhost'، '127.0.0.1'، '[::1]'] اعتبارسنجی می شود.</p>
+<p>همچنین  <strong>ALLOWED_HOSTS</strong> هنگام اجرای تست ها بررسی می‌شود.</p>
+<p>این اعتبارسنجی فقط از طریق get_host() اعمال می شود.; اگر کد شما مستقیماً از request.META به هدر Host دسترسی پیدا کند، این حفاظت امنیتی را دور می‌زنید.</p>
+<hr>
+<h2 id="cache-middleware-seconds"><a name="something">CACHE-MIDDLEWARE-SECONDS</a></h2>
+<p>مقدار دیفالت تعین کننده از چند ثانیه باید یک پیج  توسط میدل ور کش شود.</p>
+
+            
+            
+        </body>
+        </html>

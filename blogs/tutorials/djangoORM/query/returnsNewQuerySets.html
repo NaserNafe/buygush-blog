@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Methods that return new QuerySets</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="methods-that-return-new-querysets">Methods that return new QuerySets</h1>
+<p>در زیر لیست متد هست که خود یک کوئری ست بر می گردانند.</p>
+<blockquote>
+<p>این متد ها کوئری دیتابیس را اجرا نمی کنند به همین دلیل برای اجرای ایسینک امن هستند و نیازی به متد جایگزین برای ایسینک ندارند.</p>
+</blockquote>
+<hr>
+<h2 id="filterargs-kwargs">filter(*args, **kwargs)</h2>
+<p>کوئری ستی را متناسب با <a href="./fieldsLookup.html">لوکاپهای</a> داده شده برمی گرداند.</p>
+<blockquote>
+<p>پارامتر های چنتایی با هم به شکل <strong>AND</strong> در زیر ساختار اسکیو الی جوین می شوند.
+اگر به ساختار پیچیده تر مثل <strong>OR</strong> نیاز باشد می توان از <strong>Q object(*args)</strong> استفاده کرد.</p>
+</blockquote>
+<hr>
+<h2 id="excludeargs-kwargs">exclude(*args, **kwargs)</h2>
+<p>یک کوئری ست شامل آبجکت های که با لوکاپهای داده شده مچ نیست را بر می گرداند.</p>
+<blockquote>
+<p>چندین پارامتر یکجا داده شده به شکا <strong>AND</strong> در زیر لایه اس کیو الی جوین می شوند و کل عبارت در داخا <strong>NOT()</strong> جای می گیرد.</p>
+</blockquote>
+<pre><code class="language-python">Entry.objects.exclude(pub_date__gt=datetime.date(<span class="hljs-number">2005</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>), headline=<span class="hljs-string">&quot;Hello&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ...
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">NOT</span> (pub_date <span class="hljs-operator">&gt;</span> <span class="hljs-string">&#x27;2005-1-3&#x27;</span> <span class="hljs-keyword">AND</span> headline <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Hello&#x27;</span>)
+</code></pre>
+<pre><code class="language-python">Entry.objects.exclude(pub_date__gt=datetime.date(<span class="hljs-number">2005</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>)).exclude(headline=<span class="hljs-string">&quot;Hello&quot;</span>)
+</code></pre>
+<pre><code class="language-SQL"><span class="hljs-keyword">SELECT</span> ...
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">NOT</span> pub_date <span class="hljs-operator">&gt;</span> <span class="hljs-string">&#x27;2005-1-3&#x27;</span>
+<span class="hljs-keyword">AND</span> <span class="hljs-keyword">NOT</span> headline <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Hello&#x27;</span>
+</code></pre>
+<p>در مثال دوم مواری بجز بعد از تاریخ ذکر شده و همچنین نباید عنوانش هلو باشد را بر می گرداند.</p>
+<hr>
+<h2 id="annotateargs-kwargs">annotate(*args, **kwargs)</h2>
+
+        
+        
+    </body>
+    </html>

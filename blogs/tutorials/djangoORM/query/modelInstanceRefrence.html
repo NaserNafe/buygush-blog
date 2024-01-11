@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Model instance reference &#x631;&#x641;&#x631;&#x646;&#x633; &#x627;&#x6cc;&#x646;&#x633;&#x62a;&#x646;&#x633; &#x645;&#x62f;&#x644;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="model-instance-reference-رفرنس-اینستنس-مدل">Model instance reference رفرنس اینستنس مدل</h1>
+<p>در این قسمت جزئیات ای پی آی مدل توصیف می شود. که بر اساس موارد گفته شده در <a href="../model/models.html"><strong>model</strong></a> و <a href="./makingQueries.html"><strong>database query</strong></a> .پایه ریزی شده است</p>
+<hr>
+<h2 id="creating-objects-ایجاد-یک-شی-یا-آبجکت">Creating objects ایجاد یک شی یا آبجکت</h2>
+<p>برای ایجاد یک نمونه یا اینستنس یک مدل شبیه یک کلاس معمولی پایتونی انجام میگیرد.
+<strong>class Model(**kwargs)</strong>
+کیورد آرگومنت های این کلاس همان اسامی فیلد هایست که در مدل تعریف می شود.</p>
+<blockquote>
+<p>توجه به این نکته خالی از لطف نیست اگر تمایل کنجکاوانه برای اورراید کردن متد. <strong><strong>init</strong></strong> دارید. مراقب باشید که سیگنچر صدا زدن راتغیر ندهید که باعث خرابی در ذخیره کردن می شود. و همچنین احتمال وقوع خطای رکرسیو بالاست. اما بهترین راه برای ایجاد تغیرات دلخواه دو مورد پیشنهادی زیر است.</p>
+<ol>
+<li>یک کلاس متد بنویسید</li>
+</ol>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> django.db <span class="hljs-keyword">import</span> models
+
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Book</span>(models.Model):
+   title = models.CharField(max_length=<span class="hljs-number">100</span>)
+
+<span class="hljs-meta">   @classmethod</span>
+   <span class="hljs-keyword">def</span> <span class="hljs-title function_">create</span>(<span class="hljs-params">cls, title</span>):
+       book = cls(title=title)
+       <span class="hljs-comment"># do something with the book</span>
+       <span class="hljs-keyword">return</span> book
+
+
+book = Book.create(<span class="hljs-string">&quot;Pride and Prejudice&quot;</span>)
+</code></pre>
+<ol start="2">
+<li>افزودن یک منیجر دلبخواه که این روش توصیه می گردد</li>
+</ol>
+<pre><code class="language-python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">BookManager</span>(models.Manager):
+   <span class="hljs-keyword">def</span> <span class="hljs-title function_">create_book</span>(<span class="hljs-params">self, title</span>):
+       book = self.create(title=title)
+       <span class="hljs-comment"># do something with the book</span>
+       <span class="hljs-keyword">return</span> book
+
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Book</span>(models.Model):
+   title = models.CharField(max_length=<span class="hljs-number">100</span>)
+
+   objects = BookManager()
+
+
+book = Book.objects.create_book(<span class="hljs-string">&quot;Pride and Prejudice&quot;</span>)
+</code></pre>
+</blockquote>
+<hr>
+<h2 id="customizing-model-loading---سفارشی-کردن-لود-شدن-مدل">Customizing model loading   سفارشی کردن لود شدن مدل</h2>
+<p><strong>classmethod Model.from_db(db, field_names, values)</strong>
+کلاس متد  <strong>from_db()</strong> برای سفارشی کردن نحوه ساخته شدن نمونه به هنگام لود شدن از دیتابیس استفاده می شود.</p>
+<p>آرگیومنت <strong>db</strong> حاوی اطلاعاتی از اسم دیتابیس است برای لود شدن.
+<strong>field_names</strong> شامل همه اسامی فیلدهایست که لود شده اند.
+<strong>values</strong> هم حاوی مقادیر لود شده ا هر از هر فیلد داخل <strong>field_names</strong> است.
+فیلد های لود شده به همان ترتیب مقادبر لود شده است.و مقادیر لود شده به همان ترتیب که <strong><strong>init</strong>()</strong> انتظارشان را دارد است.
+نمونه به کمک <strong>cls(*value)</strong> ساخته می شود.
+اگر که هر فیلدی دیفر یا به قولی تاخیر کند در <strong>field_names</strong> ظاهر نخواهد شد.
+در این صورت، یک مقدار از  <strong>django.db.models.DEFERRED</strong> به هر یک از فیلد های غایب اساین می شود.</p>
+<p>در زیر مثالی که نشان می دهد چگونه مقادیر اولیه از فیلد که از دیتابیس لود می شوند ثبت می شود.</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> django.db.models <span class="hljs-keyword">import</span> DEFERRED
+
+
+<span class="hljs-meta">@classmethod</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">from_db</span>(<span class="hljs-params">cls, db, field_names, values</span>):
+    <span class="hljs-comment"># Default implementation of from_db() (subject to change and could</span>
+    <span class="hljs-comment"># be replaced with super()).</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(values) != <span class="hljs-built_in">len</span>(cls._meta.concrete_fields):
+        values = <span class="hljs-built_in">list</span>(values)
+        values.reverse()
+        values = [
+            values.pop() <span class="hljs-keyword">if</span> f.attname <span class="hljs-keyword">in</span> field_names <span class="hljs-keyword">else</span> DEFERRED
+            <span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> cls._meta.concrete_fields
+        ]
+    instance = cls(*values)
+    instance._state.adding = <span class="hljs-literal">False</span>
+    instance._state.db = db
+    <span class="hljs-comment"># customization to store the original field values on the instance</span>
+    instance._loaded_values = <span class="hljs-built_in">dict</span>(
+        <span class="hljs-built_in">zip</span>(field_names, (value <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> values <span class="hljs-keyword">if</span> value <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> DEFERRED))
+    )
+    <span class="hljs-keyword">return</span> instance
+
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">save</span>(<span class="hljs-params">self, *args, **kwargs</span>):
+    <span class="hljs-comment"># Check how the current values differ from ._loaded_values. For example,</span>
+    <span class="hljs-comment"># prevent changing the creator_id of the model. (This example doesn&#x27;t</span>
+    <span class="hljs-comment"># support cases where &#x27;creator_id&#x27; is deferred).</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> self._state.adding <span class="hljs-keyword">and</span> (
+        self.creator_id != self._loaded_values[<span class="hljs-string">&quot;creator_id&quot;</span>]
+    ):
+        <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">&quot;Updating the value of creator isn&#x27;t allowed&quot;</span>)
+    <span class="hljs-built_in">super</span>().save(*args, **kwargs)
+</code></pre>
+<hr>
+<h2 id="refreshing-objects-from-database--نو-کردن-نمونه-از-دیتابیس">Refreshing objects from database  نو کردن نمونه از دیتابیس</h2>
+<p>اگر یک فیلد از اینستنس مدل حذف شود، دسترسی دوباره به آن، مقدار را دوباره از دیتابیس لود میکند.</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>obj = MyModel.objects.first()
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">del</span> obj.field
+<span class="hljs-meta">&gt;&gt;&gt; </span>obj.field  <span class="hljs-comment"># Loads the field from the database</span>
+</code></pre>
+<p><strong>Model.refresh_from_db(using=None, fields=None)</strong></p>
+<p><strong>Model.arefresh_from_db(using=None, fields=None) ورژن آسینک</strong></p>
+<p>اگر نیاز به نو کردن مقادیر مدل از دیتابیس باشد از متد  <strong>refresh_from_db()</strong> استفاده می شود.
+وقتی این متد بدون آرگیومنت صدا زده می شود اتفاقات زیر رخ می دهد.</p>
+<ol>
+<li>همه فیلد های دیفر نشده مدل آپدیت خواهد شد به مقداری که در این لحظه در دیتا بیس قرار دارد.</li>
+<li>همه ارتباطات از نمونه نو شده پاک می شوند.
+فقط فیلد های همین مدل نه ریلیشن ها نو خواهند شد. دیگر مقادیر وابسته به به دیتابیس مثل annotation ها نو نوا نخواهد شد. هیچ اتریبیوت  @cached_property پاک نخواهد شد.</li>
+</ol>
+<hr>
+<h2 id="other-attributes-دیگر-اتریبیت-ها">Other attributes دیگر اتریبیت ها</h2>
+<p><strong>_state</strong></p>
+<p><strong>Model._state</strong>
+اتریبیوت استیت برمیگردد به یک آبجکت مدل استیت <strong>ModelState</strong> که لایف سایکل نمونه را رهگیری می کند.</p>
+<p><strong>ModelState</strong> دو اتربیوت دارد :</p>
+<p><strong>adding</strong> که یک فلق است که مقدار true را در صورتی که مدل هنوز در دیتا بیس ذخیره نشده است بر میگرداند
+و <strong>db</strong> یک استرینگ که نام دیتابیسس که نمونه از آن لود و به آن سیو میشود است.</p>
+<p>یک اینستنس تازه ساخته شده مقدار اددینگ ترو دارد و دی بی آن نان است چون هنوز ذخیره نشده است.
+اینستنسی که از یک کوئری ست آورده شده است اددینگ فالس و دی بی متناظر با دیتابیسی که با آن سروکار دارد است.</p>
+
+            
+            
+        </body>
+        </html>

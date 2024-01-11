@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Django Exceptions</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="django-exceptions">Django Exceptions</h1>
+<hr>
+<h2 id="suspiciousoperation">SuspiciousOperation</h2>
+<p><strong>exception SuspiciousOperation</strong></p>
+<p>اررور <strong>SuspiciousOperation</strong> زمانی رخ می دهد که کاربر عملیاتی را انجام داده باشد که باید از منظر امنیتی مشکوک تلقی شود، مانند دستکاری یک کوکی سشن.</p>
+<p>زیر کلاس های عملیات مشکوک عبارتند از:</p>
+<ul>
+<li>DisallowedHost</li>
+<li>DisallowedModelAdminLookup</li>
+<li>DisallowedModelAdminToField</li>
+<li>DisallowedRedirect</li>
+<li>InvalidSessionKey</li>
+<li>RequestDataTooBig</li>
+<li>SuspiciousFileOperation</li>
+<li>SuspiciousMultipartForm</li>
+<li>SuspiciousSession</li>
+<li>TooManyFieldsSent</li>
+<li>TooManyFilesSent</li>
+</ul>
+<p>اگر یک اررور SuspiciousOperation به سطح کنترل کننده ASGI/WSGI برسد، در سطح Error ثبت می شود و منجر به HttpResponseBadRequest می شود.
+ـــ</p>
+
+            
+            
+        </body>
+        </html>

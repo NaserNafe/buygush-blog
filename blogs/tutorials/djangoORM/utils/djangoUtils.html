@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Django Utils  &#x627;&#x628;&#x632;&#x627;&#x631; &#x647;&#x627;&#x6cc; &#x62c;&#x646;&#x6af;&#x648;&#x6cc;&#x6cc;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="django-utils--ابزار-های-جنگویی">Django Utils  ابزار های جنگویی</h1>
+<p>در اینجا همه ماژول هایی که استیبل و پایدار ابزارخانه جنگو هستد آورده شده است.
+این ابزار برای استفاده داخلی جنگو طراحی شده اند.</p>
+<hr>
+<h2 id="djangoutilscache-ابزاری-برای-کش">django.utils.cache ابزاری برای کش</h2>
+<p>این ماژول شامل فانکشن های کمک کننده برای کنترل کش HTTP است. که به کمک هدر موجود در رسپانس به نام <strong>Vary</strong>. شامل فانکشن های برای پچ کردن کردن هدرهای  آبجکت ریسپانس مستقیم و فانکشن ها رو دکوریت میکند تا خودشون <strong>header-patch</strong> را تغییر دهند.</p>
+<p>اساسا وری اچ تی تی پی هدر تعریف می کند که کدام هدرها را یک کش باید احتساب کند زمانی که کلید کش آن را می سازد.
+رکوست هایی با یک آدرس یکسان اما با هدر کانتنت های متفاوت برای هدرهای نامگذاری شده در ورری نیاز به کلید کش های متفاوت دارند تا از ارسال محتوای اشتباه جلوگیری کنند.</p>
+<p>برای مثال  میدیل ور اینترنشنالیزه کننده با هدر <strong>Accept-language</strong> به کش های متفاوت نیاز خواهد داشت.</p>
+<h2 id="patch_cache_controlresponse-kwargs">patch_cache_control(response, **kwargs)</h2>
+<p>این فانکشن هدر <strong>Cache-Control</strong> را به وسیله افزودن همه کی ورد آرگیومنت ها به آن پچ می کند. تغرات به روال زیر خواهد بود.</p>
+<ol>
+<li>همه نام پارامتر های کیورد تبدیل به حروف کوچک می شوند و آندراسکورها به هایفن تبدیل می شوند.</li>
+<li>اگر مقدار یک پارامتر True است یعنی دقیقا خود ترو است فقظ نام پارامتر به هدر افزوده می شود.</li>
+<li>همه پارامتر های دیگر بعد ار اعمال متد str() به ولییو آن افزوده می شود.</li>
+</ol>
+<h2 id="get_max_ageresponse">get_max_age(response)</h2>
+<p>از هدر کش کنترولر رسپانس مکس ایج را که یک اینتجر است برمی گرداند. و None در صورتی که اینتجر پیدا نکرد.</p>
+<h2 id="patch_response_headersresponse-cache_timeoutnone">patch_response_headers(response, cache_timeout=None)</h2>
+<p>بعضی هدرهای مفید را به آبجکت <strong>HttpResponse</strong> می افزاید.</p>
+<ol>
+<li><strong>Expires</strong></li>
+<li><strong>Chache-Control</strong></li>
+</ol>
+<p>هر یک از هدرها در صورتی که قبلا افزوده نشده باشد افزوده می شود.
+آرگیومنت cache-timeout به ثانیه است.</p>
+
+            
+            
+        </body>
+        </html>

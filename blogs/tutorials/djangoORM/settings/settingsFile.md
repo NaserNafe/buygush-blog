@@ -79,13 +79,91 @@ ___
 
 این اعتبارسنجی فقط از طریق get_host() اعمال می شود.; اگر کد شما مستقیماً از request.META به هدر Host دسترسی پیدا کند، این حفاظت امنیتی را دور می‌زنید.
 
+___
+## APPEND_SLASH
 
+**Default:True**
+
+وقتی به مقدار ترو ست می شود، اگر رکوست URL به هیچ یک از الگو های موجود در URLconf و با اسلش به پایان نرسد، یک ریدایرکت HTTP در همان آدرس URL با یک اسلش در انتهای آن صادر می شود.
+
+توجه شود که این ریدایرکت موجب می شود هر دیتایی که در ریکوست پست سابمیت شده از دست برود.
+
+تنظیمات افزونگر اسلش فقط زمانی استفاده می شود که **CommonMiddleware** نصب شده باشد.
+
+___
+## CACHES
+Default:
+```python
+{
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
+```
+یک دیکشنری شامل تنظیمات برای برای همه کش ها که با جنگو استفاده می شود.
+یک دیکشنری تو در تو است که محتوای آن نام کش را مپ می کند به یک دیکشنری حاوی آپشن هایی برای کش شخصی.
+
+تنظیمات کش ها باید پیکربندی شود به یک کش دیفالت؛ و هر کش مازاد هم قابل تعین است.
+اگر از یک کش بک اند متفاوتی از لوکال مموری کش استفاده می کنید، نیاز است که چندین کش را تعریف کنید و دیگر آپشن ها هم لازم خواهد بود.
+کش آپشن های زیر در دسترس هستند.
+
+**BACKEND**
+بک اند های کش ها پیش ساخته عبارتند از:
+
+- 'django.core.cache.backends.db.DatabaseCache'
+- 'django.core.cache.backends.dummy.DummyCache'
+- 'django.core.cache.backends.filebased.FileBasedCache'
+- 'django.core.cache.backends.locmem.LocMemCache'
+- 'django.core.cache.backends.memcached.PyMemcacheCache'
+- 'django.core.cache.backends.memcached.PyLibMCCache'
+- 'django.core.cache.backends.redis.RedisCache'
+
+این امکان نیز وجود دارد که بک اند کش که در جنگو موجود نیست را با تعریف مسیر کامل کلاس آن به شکل زیر استفاده کرد؛
+**mypackage.backends.whatever.WhateverCache**
+___
+## KEY_FUNCTION 
+
+یک رشته شامل آدرس نقطه دار یک فانکشن یا هر چیز قابل صدا زدن، که تعریف می کند چگونه  یک پرفیکس  و ورژن . کلید را برای کلید نهایی کش سرهم کند. مقدار دیفال شبیه یک فانکشن است:
+
+```python
+def make_key(key, key_prefix, version):
+    return ":".join([key_prefix, str(version), key])
+```
+هر کی فانکشن دلخواهی را می توان استفاده کرد به شرطی که این تریب از ورودی ها را داشته باشد.
+___
+## KEY_PREFIX 
+
+**Default:""**
+
+یک استرینگ که اتوماتیک شامل (پیش فرض به ابتدای آن افزوده خواهد شد) همه کلید های کش استفاده شده توسط سرور جنگو است
+___
+## LOCATION 
+
+**Default:""**
+
+محل کش مورد استفاده.ممکن است آدرس فایل در فایل سیستم کش باشد یا یک هاست و پرت برای ممکش سرور ویا تعین کننده نام کش مموری محلی باشد.
+
+```python
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "/var/tmp/django_cache",
+    }
+}
+```
+___
+## OPTIONS
+
+**Default:None**
+
+پارامترهای اضافی برای انتقال به بک اند کش. پارامتر ها بسته به نوع بک اند کش متغیر است.
+ 
 
 
 
 
 
 ___
-## <a name="something">CACHE-MIDDLEWARE-SECONDS</a>
+## CACHE-MIDDLEWARE-SECONDS
 
 مقدار دیفالت تعین کننده از چند ثانیه باید یک پیج  توسط میدل ور کش شود. 

@@ -104,7 +104,66 @@
 <p>همچنین  <strong>ALLOWED_HOSTS</strong> هنگام اجرای تست ها بررسی می‌شود.</p>
 <p>این اعتبارسنجی فقط از طریق get_host() اعمال می شود.; اگر کد شما مستقیماً از request.META به هدر Host دسترسی پیدا کند، این حفاظت امنیتی را دور می‌زنید.</p>
 <hr>
-<h2 id="cache-middleware-seconds"><a name="something">CACHE-MIDDLEWARE-SECONDS</a></h2>
+<h2 id="append_slash">APPEND_SLASH</h2>
+<p><strong>Default:True</strong></p>
+<p>وقتی به مقدار ترو ست می شود، اگر رکوست URL به هیچ یک از الگو های موجود در URLconf و با اسلش به پایان نرسد، یک ریدایرکت HTTP در همان آدرس URL با یک اسلش در انتهای آن صادر می شود.</p>
+<p>توجه شود که این ریدایرکت موجب می شود هر دیتایی که در ریکوست پست سابمیت شده از دست برود.</p>
+<p>تنظیمات افزونگر اسلش فقط زمانی استفاده می شود که <strong>CommonMiddleware</strong> نصب شده باشد.</p>
+<hr>
+<h2 id="caches">CACHES</h2>
+<p>Default:</p>
+<pre><code class="language-python">{
+    <span class="hljs-string">&quot;default&quot;</span>: {
+        <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.locmem.LocMemCache&quot;</span>,
+    }
+}
+</code></pre>
+<p>یک دیکشنری شامل تنظیمات برای برای همه کش ها که با جنگو استفاده می شود.
+یک دیکشنری تو در تو است که محتوای آن نام کش را مپ می کند به یک دیکشنری حاوی آپشن هایی برای کش شخصی.</p>
+<p>تنظیمات کش ها باید پیکربندی شود به یک کش دیفالت؛ و هر کش مازاد هم قابل تعین است.
+اگر از یک کش بک اند متفاوتی از لوکال مموری کش استفاده می کنید، نیاز است که چندین کش را تعریف کنید و دیگر آپشن ها هم لازم خواهد بود.
+کش آپشن های زیر در دسترس هستند.</p>
+<p><strong>BACKEND</strong>
+بک اند های کش ها پیش ساخته عبارتند از:</p>
+<ul>
+<li>'django.core.cache.backends.db.DatabaseCache'</li>
+<li>'django.core.cache.backends.dummy.DummyCache'</li>
+<li>'django.core.cache.backends.filebased.FileBasedCache'</li>
+<li>'django.core.cache.backends.locmem.LocMemCache'</li>
+<li>'django.core.cache.backends.memcached.PyMemcacheCache'</li>
+<li>'django.core.cache.backends.memcached.PyLibMCCache'</li>
+<li>'django.core.cache.backends.redis.RedisCache'</li>
+</ul>
+<p>این امکان نیز وجود دارد که بک اند کش که در جنگو موجود نیست را با تعریف مسیر کامل کلاس آن به شکل زیر استفاده کرد؛
+<strong>mypackage.backends.whatever.WhateverCache</strong></p>
+<hr>
+<h2 id="key_function">KEY_FUNCTION</h2>
+<p>یک رشته شامل آدرس نقطه دار یک فانکشن یا هر چیز قابل صدا زدن، که تعریف می کند چگونه  یک پرفیکس  و ورژن . کلید را برای کلید نهایی کش سرهم کند. مقدار دیفال شبیه یک فانکشن است:</p>
+<pre><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">make_key</span>(<span class="hljs-params">key, key_prefix, version</span>):
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;:&quot;</span>.join([key_prefix, <span class="hljs-built_in">str</span>(version), key])
+</code></pre>
+<p>هر کی فانکشن دلخواهی را می توان استفاده کرد به شرطی که این تریب از ورودی ها را داشته باشد.</p>
+<hr>
+<h2 id="key_prefix">KEY_PREFIX</h2>
+<p><strong>Default:&quot;&quot;</strong></p>
+<p>یک استرینگ که اتوماتیک شامل (پیش فرض به ابتدای آن افزوده خواهد شد) همه کلید های کش استفاده شده توسط سرور جنگو است</p>
+<hr>
+<h2 id="location">LOCATION</h2>
+<p><strong>Default:&quot;&quot;</strong></p>
+<p>محل کش مورد استفاده.ممکن است آدرس فایل در فایل سیستم کش باشد یا یک هاست و پرت برای ممکش سرور ویا تعین کننده نام کش مموری محلی باشد.</p>
+<pre><code class="language-python">CACHES = {
+    <span class="hljs-string">&quot;default&quot;</span>: {
+        <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.filebased.FileBasedCache&quot;</span>,
+        <span class="hljs-string">&quot;LOCATION&quot;</span>: <span class="hljs-string">&quot;/var/tmp/django_cache&quot;</span>,
+    }
+}
+</code></pre>
+<hr>
+<h2 id="options">OPTIONS</h2>
+<p><strong>Default:None</strong></p>
+<p>پارامترهای اضافی برای انتقال به بک اند کش. پارامتر ها بسته به نوع بک اند کش متغیر است.</p>
+<hr>
+<h2 id="cache-middleware-seconds">CACHE-MIDDLEWARE-SECONDS</h2>
 <p>مقدار دیفالت تعین کننده از چند ثانیه باید یک پیج  توسط میدل ور کش شود.</p>
 
             

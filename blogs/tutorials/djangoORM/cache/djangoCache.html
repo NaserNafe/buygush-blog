@@ -1,86 +1,121 @@
 <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Django&CloseCurlyQuote;s cache framework  &#x641;&#x631;&#x6cc;&#x645; &#x641;&#x631;&#x6a9; &#x6a9;&#x634; &#x62c;&#x646;&#x6af;&#x648;</title>
-            <style>
-/* From extension vscode.github */
-/*---------------------------------------------------------------------------------------------
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Django&CloseCurlyQuote;s cache framework &#x641;&#x631;&#x6cc;&#x645; &#x641;&#x631;&#x6a9; &#x6a9;&#x634;
+        &#x62c;&#x646;&#x6af;&#x648;</title>
+    <style>
+        /* From extension vscode.github */
+        /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-.vscode-dark img[src$=\#gh-light-mode-only],
-.vscode-light img[src$=\#gh-dark-mode-only] {
-	display: none;
-}
+        .vscode-dark img[src$=\#gh-light-mode-only],
+        .vscode-light img[src$=\#gh-dark-mode-only] {
+            display: none;
+        }
+    </style>
 
-</style>
-            
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
-<style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
-                font-size: 14px;
-                line-height: 1.6;
-            }
-        </style>
-        <style>
-.task-list-item {
-    list-style-type: none;
-}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
 
-.task-list-item-checkbox {
-    margin-left: -20px;
-    vertical-align: middle;
-    pointer-events: none;
-}
-</style>
-        
-        </head>
-        <body class="vscode-body vscode-light">
-            <h1 id="djangos-cache-framework--فریم-فرک-کش-جنگو">Django’s cache framework  فریم فرک کش جنگو</h1>
-<p>نکته مثیت یک وبسایت دانامیک خب داینامیک بودن سایته. هر موقه که یک کاربر یک پیجی را ریکوست میکند، وب سرور همه جوره محاسباتی انجام میده از کوئری زدن به دیتابیس بگیر تا رندر کردن تمپلیت ها و لاجیک مربوط به بیزینس تا کاربر سایت را مشاهده کند.
-از دیدگاه سربار پردازش، این بسیار گران‌تر از چیدمان سرور استاندارد خواندن یک فایل خارج از فایل سیستم (standard read-a-file-off-the-filesystem server arrangement روشی برای خواندن اطلاعات بدون پردازش) شما است.
-برای بسیاری از وب اپلیکیشن ها این سربار مسئله بسیار مهمی نیست. همه اپلیکیشن ها که سایت واشینگتون پست یا سایت اسلش دات او آرجی نیستند.آنها اکثرا اپی بین کوچک تا متوسط سایز با ترافیک متوسط هستند. اما برای سایت های پر ترافیک خیلی ضروری است تا سربار را تا حد ممکن کاهش داد.
-اینجاست که کش کردن بسیار کمک کننده است.</p>
-<p>کش کردن یعنی ذخیره کردن نتایج محاسبات پرهزینه است تا بار دیگر این محاسبات صورت نگیرد.
-جنگو دارای سیسم کشینگ قوی است که اجازه ذخیره پیج های داینامیک را میدهد تا دوباره محاسبات از اول صورت نگیرد.</p>
-<p>جنگو جهت سهولت سطح جزئیات کش مختلفی ارائه می دهد.
-شما می توانید خروجی ویوهای ویژه را کش کنید، شما می توانیدفقط یک تکه که تولید آن سخت است یا کل سایت را کش کنید.</p>
-<p>جنگو همچنین با داون استریمرکش ها مثل <strong>Squid</strong> و <strong>browser-based</strong> به خوبی کار می کند.</p>
-<hr>
-<h2 id="setting-up-the-cache---تنظیم-کردن-کش">Setting up the cache   تنظیم کردن کش</h2>
-<p>سیستم کش نیاز به مقدار کم از تنظیمات نیاز دارد. برای نمونه شما باید مشخص کنید کجا باید اطلاعات زندگی کنند، در دیتابیس یا فایل سیستم و یا مستقیم در مموری. این یک تصمیم مهمی است که تاثیر بسزایی در پرفرمنس کش دارد. بعضی از کش ها سریع تر از دیگری عمل می کنند.</p>
-<p>ترجیحات مربوط به کش در فایل ستینگ <a href="/blogs/tutorials/djangoORM/settings/settingsFile.html#caches">Cache</a>  نوشته می شود.</p>
-<hr>
-<h2 id="memcached">Memcached</h2>
-<p>ممکش یک سرور کاملا مموری بیس است که اساسا توسعه یافت تا لود بسیار بالا در سایت <strong><a href="http://LiveJournal.com">LiveJournal.com</a></strong> را هندل کند و در نتیجه توسط اینتراکتیو جنگو اوپن سورس شد. توسط سایت های مثل  <strong>Facebook</strong> و <strong>Wikipedia</strong> استفاده گردید تا دسترسی به دیتابیس را کاهش و پرفرمنس سایت ها را بالا برد.</p>
-<p>ممکش به شکل دیمن یعنی در بکگراند اجرا می شود و مقدار رم زیادی را به خود اختصاص می دهد. همه کاری که انجام می دهد این است که یک اینترفیس بسیار سریع برای افزودن و بازخوانی و حذف دیتا در کش ارائه می دهد. همه دیتا در مستقیما در مموری ذخیره می شود پس سرباری به فایس سیسنم و دیتابیس ندارد.</p>
-<p>بعد از نصب خود <strong>Memcached</strong> نیاز به نصب بایند کننده ممکش است. تعدادی بایند ممکش برای پایتون موجود است که جنگو از دو مورد <strong>pylibmc</strong> و <strong>pymemcache</strong> پشتیبانی می کند.</p>
-<p>برای استفاده از ممکش با جنگو؛</p>
-<ul>
-<li>بسته به انتخاب بایندینگ باید <strong>django.core.cache.backends.memcached.PyMemcacheCache</strong> یا <strong>django.core.cache.backends.memcached.PyLibMCCache</strong> را در <strong>BACKEND</strong> فایل ستینگ باید ست گردد.</li>
-<li>و قسمت <strong>LOCATION</strong> به شکل <strong>ip:port</strong> که آی پی آی پی آدرس ممکش در بکگراند و پورت هم  به پورت ممکش کی در حال اجرا است باید ست شود. ویا به شکل  <strong>unix:path</strong> باید نوشته شود که پس مسیر Memcached Unix socket file است.</li>
-</ul>
-<pre><code class="language-python">CACHES = {
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+            pointer-events: none;
+        }
+
+        p {
+            direction: rtl;
+        }
+
+        ul {
+            direction: rtl;
+        }
+    </style>
+
+</head>
+
+<body class="vscode-body vscode-light">
+    <h1 id="djangos-cache-framework-فریم-ورک-کش-جنگو">Django’s cache framework فریم ورک کش جنگو</h1>
+    <p>نکته مثیت یک وبسایت دانامیک خب داینامیک بودن سایته. هر موقه که یک کاربر یک پیجی را ریکوست میکند، وب سرور همه جوره
+        محاسباتی انجام میده از کوئری زدن به دیتابیس بگیر تا رندر کردن تمپلیت ها و لاجیک مربوط به بیزینس تا کاربر سایت را
+        مشاهده کند.
+        از دیدگاه سربار پردازش، این بسیار گران‌تر از چیدمان سرور استاندارد خواندن یک فایل خارج از فایل سیستم (standard
+        read-a-file-off-the-filesystem server arrangement روشی برای خواندن اطلاعات بدون پردازش) شما است.
+        برای بسیاری از وب اپلیکیشن ها این سربار مسئله بسیار مهمی نیست. همه اپلیکیشن ها که سایت واشینگتون پست یا سایت
+        اسلش دات او آرجی نیستند.آنها اکثرا اپی بین کوچک تا متوسط سایز با ترافیک متوسط هستند. اما برای سایت های پر ترافیک
+        خیلی ضروری است تا سربار را تا حد ممکن کاهش داد.
+        اینجاست که کش کردن بسیار کمک کننده است.</p>
+    <p>کش کردن یعنی ذخیره کردن نتایج محاسبات پرهزینه است تا بار دیگر این محاسبات صورت نگیرد.
+        جنگو دارای سیسم کشینگ قوی است که اجازه ذخیره پیج های داینامیک را میدهد تا دوباره محاسبات از اول صورت نگیرد.</p>
+    <p>جنگو جهت سهولت سطح جزئیات کش مختلفی ارائه می دهد.
+        شما می توانید خروجی ویوهای ویژه را کش کنید، شما می توانیدفقط یک تکه که تولید آن سخت است یا کل سایت را کش کنید.
+    </p>
+    <p>جنگو همچنین با داون استریمرکش ها مثل <strong>Squid</strong> و <strong>browser-based</strong> به خوبی کار می کند.
+    </p>
+    <hr>
+    <h2 id="setting-up-the-cache-تنظیم-کردن-کش">Setting up the cache تنظیم کردن کش</h2>
+    <p>سیستم کش نیاز به مقدار کم از تنظیمات نیاز دارد. برای نمونه شما باید مشخص کنید کجا باید اطلاعات زندگی کنند، در
+        دیتابیس یا فایل سیستم و یا مستقیم در مموری. این یک تصمیم مهمی است که تاثیر بسزایی در پرفرمنس کش دارد. بعضی از کش
+        ها سریع تر از دیگری عمل می کنند.</p>
+    <p>ترجیحات مربوط به کش در فایل ستینگ <a
+            href="/blogs/tutorials/djangoORM/settings/settingsFile.html#caches">Cache</a> نوشته می شود.</p>
+    <hr>
+    <h2 id="memcached">Memcached</h2>
+    <p>ممکش یک سرور کاملا مموری بیس است که اساسا توسعه یافت تا لود بسیار بالا در سایت <strong><a
+                href="http://LiveJournal.com">LiveJournal.com</a></strong> را هندل کند و در نتیجه توسط اینتراکتیو جنگو
+        اوپن سورس شد. توسط سایت های مثل <strong>Facebook</strong> و <strong>Wikipedia</strong> استفاده گردید تا دسترسی
+        به دیتابیس را کاهش و پرفرمنس سایت ها را بالا برد.</p>
+    <p>ممکش به شکل دیمن یعنی در بکگراند اجرا می شود و مقدار رم زیادی را به خود اختصاص می دهد. همه کاری که انجام می دهد
+        این است که یک اینترفیس بسیار سریع برای افزودن و بازخوانی و حذف دیتا در کش ارائه می دهد. همه دیتا در مستقیما در
+        مموری ذخیره می شود پس سرباری به فایس سیسنم و دیتابیس ندارد.</p>
+    <p>بعد از نصب خود <strong>Memcached</strong> نیاز به نصب بایند کننده ممکش است. تعدادی بایند ممکش برای پایتون موجود
+        است که جنگو از دو مورد <strong>pylibmc</strong> و <strong>pymemcache</strong> پشتیبانی می کند.</p>
+    <p>برای استفاده از ممکش با جنگو؛</p>
+    <ul>
+        <li>بسته به انتخاب بایندینگ باید <strong>django.core.cache.backends.memcached.PyMemcacheCache</strong> یا
+            <strong>django.core.cache.backends.memcached.PyLibMCCache</strong> را در <strong>BACKEND</strong> فایل ستینگ
+            باید ست گردد.
+        </li>
+        <li>و قسمت <strong>LOCATION</strong> به شکل <strong>ip:port</strong> که آی پی آی پی آدرس ممکش در بکگراند و پورت
+            هم به پورت ممکش کی در حال اجرا است باید ست شود. ویا به شکل <strong>unix:path</strong> باید نوشته شود که پس
+            مسیر Memcached Unix socket file است.</li>
+    </ul>
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.memcached.PyMemcacheCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: <span class="hljs-string">&quot;127.0.0.1:11211&quot;</span>,
     }
 }
 </code></pre>
-<pre><code class="language-python">CACHES = {
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.memcached.PyMemcacheCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: <span class="hljs-string">&quot;unix:/tmp/memcached.sock&quot;</span>,
     }
 }
 </code></pre>
-<p>یک ویژگی عالی ممگش توانایی آن در شییر کردن بر روی چندین سرور است. یعنی ممکش  دیمون را می توان روی چند ماشین اجرا کرد، وبرنامه انگار فقط با یک ماشین سر و کار دارد، بدون اینکه مقادیر کش را در ماشین ها تکرار کرد.
-برای بهره بردن از این توانایی باید همه آدرس های سرور ها را در <strong>LOCATION</strong> نوشت چه به شکل یک لیست  ویا چه به شکل جدا کننده کما ویا سمی کولن در سترینگ.</p>
-<pre><code class="language-python">CACHES = {
+    <p>یک ویژگی عالی ممگش توانایی آن در شییر کردن بر روی چندین سرور است. یعنی ممکش دیمون را می توان روی چند ماشین اجرا
+        کرد، وبرنامه انگار فقط با یک ماشین سر و کار دارد، بدون اینکه مقادیر کش را در ماشین ها تکرار کرد.
+        برای بهره بردن از این توانایی باید همه آدرس های سرور ها را در <strong>LOCATION</strong> نوشت چه به شکل یک لیست
+        ویا چه به شکل جدا کننده کما ویا سمی کولن در سترینگ.</p>
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.memcached.PyMemcacheCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: [
@@ -90,7 +125,7 @@
     }
 }
 </code></pre>
-<pre><code class="language-python">CACHES = {
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.memcached.PyMemcacheCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: [
@@ -101,49 +136,62 @@
     }
 }
 </code></pre>
-<p>به طور پیش فرض <strong>PyMemcacheCache</strong> بک اند آپشن های زیر را ست می کند. برای اورراید کردن آنها <a href="/blogs/tutorials/djangoORM/settings/settingsFile.html#">OPTIONS</a></p>
-<hr>
-<h2 id="cache-arguments">Cache arguments</h2>
-<p>به هر کش بک اندی می توان آرگیومنت های اضافی داد برای کنترل رفتار کش داد. این آرگیومنت ها به عنوان کلید های اضافی در <a href="/blogs/tutorials/djangoORM/settings/settingsFile.html#caches">CACHES</a> ارائه می شوند. مقادیر معتبر آرگیومنت ها عبارنتد از:</p>
-<ul>
-<li><strong>TIMEOUT</strong>:</li>
-</ul>
-<p>مقدار پیشفرض  تایم اوت به ثانیه و برای استفاده در کش است.
-که مقدار *<em>۳۰۰</em> ثانیه یا ۵ دقیقه است. می توان تایم اوت را به نان ست کرد که کلید کش هرگز منقضی نخواهد شد. مقدار را صفر قرار پاپن باعث منقضی شدن بلافاصله خواهد که عملا کشی صورت نخواهد گرفت.</p>
-<ul>
-<li><strong>OPTIONS</strong></li>
-</ul>
-<p>هر آپشنی که باید به بک اند کش تحویل داده شود.لیست موارد مجاز بسته به هر بک اندی متفاوت است، و کش بک اند با یک لایبرری پشتیبانی می شود آپشن های آن از اینجا گرفته خواهد شد.
-هر کش بک اندی ستراتژی جمع آوری اطلاعات خود را بع کر می بندد.
-<strong>locmem, filesystem</strong> و <strong>database</strong> آپشن های زیر را معتبر می دانند.</p>
-<ul>
-<li>
-<p><strong>MAX_ENTRIES</strong>
-ماکزیمم تعداد ورودی های مجاز کش قبل از اینکه مقادیر کهنه پاک شوند. مقدار پیشفرض آن ۳۰۰ می باشد.</p>
-</li>
-<li>
-<p><strong>CULL_FREQUENCY</strong>
-کسری از مقادیر که در زمان رسیدن به مقدار ماکزیمم جمع آوری می شود. مقدار نسبت یک بر <strong>CULL_FREQUENCY</strong> خواهد بود. با ست کردن <strong>CULL_FREQUENCY</strong> به ۲ عمل جمع آوری نصف مقادیر وقتی به ماکز میرسد اتفاق خواهد افتاد. مقدار پیشفرض ۳ است که ورودی حتما باید یک اینتیجر باشد.</p>
-<p>مقار را به صفر ست کردن یعنی همه ورودی ها وقتی به ماکز رسیدند خالی خواهد شد. در بعضی از بک اند ها مثل دیتابیس به ویژه صفر قرار دادن باعث افزایش سرعت خواهد شد اما به قیمت از دست دادن اطلاعات.</p>
-</li>
-</ul>
-<p>بک اند های ممکش و ردیس آپشن ها را به شکل کیوردآرگیومنت به کلاینت کانستراکتور تحویل می دهند که کنترل پیشرفته ای روی رفتار کلاینت دارد.</p>
-<ul>
-<li><strong>KEY_PREFIX</strong></li>
-</ul>
-<p>یک استرینگ که اتوماتیک شامل (پیش فرض به ابتدای آن افزوده خواهد شد) همه کلید های کش استفاده شده توسط سرور جنگو است</p>
-<ul>
-<li>
-<p><strong>VERSION</strong></p>
-<p>مقدار دیفالت شماره ورژن برای کلید های تولید شده کش توسط سرور جنگو.</p>
-</li>
-<li>
-<p><strong>KEY_FUNCTION</strong></p>
-<p>یک رشته شامل آدرس نقطه دار یک فانکشن یا هر چیز قابل صدا زدن، که تعریف می کند چگونه  یک پرفیکس  و ورژن . کلید را برای کلید نهایی کش سرهم کند.</p>
-</li>
-</ul>
-<p>در این مثال فایل سیستم پیکربندی می شود.</p>
-<pre><code class="language-python">CACHES = {
+    <p>به طور پیش فرض <strong>PyMemcacheCache</strong> بک اند آپشن های زیر را ست می کند. برای اورراید کردن آنها <a
+            href="/blogs/tutorials/djangoORM/settings/settingsFile.html#">OPTIONS</a></p>
+    <hr>
+    <h2 id="cache-arguments">Cache arguments</h2>
+    <p>به هر کش بک اندی می توان آرگیومنت های اضافی داد برای کنترل رفتار کش داد. این آرگیومنت ها به عنوان کلید های اضافی
+        در <a href="/blogs/tutorials/djangoORM/settings/settingsFile.html#caches">CACHES</a> ارائه می شوند. مقادیر معتبر
+        آرگیومنت ها عبارنتد از:</p>
+    <ul>
+        <li><strong>TIMEOUT</strong>:</li>
+    </ul>
+    <p>مقدار پیشفرض تایم اوت به ثانیه و برای استفاده در کش است.
+        که مقدار *<em>۳۰۰</em> ثانیه یا ۵ دقیقه است. می توان تایم اوت را به نان ست کرد که کلید کش هرگز منقضی نخواهد شد.
+        مقدار را صفر قرار پاپن باعث منقضی شدن بلافاصله خواهد که عملا کشی صورت نخواهد گرفت.</p>
+    <ul>
+        <li><strong>OPTIONS</strong></li>
+    </ul>
+    <p>هر آپشنی که باید به بک اند کش تحویل داده شود.لیست موارد مجاز بسته به هر بک اندی متفاوت است، و کش بک اند با یک
+        لایبرری پشتیبانی می شود آپشن های آن از اینجا گرفته خواهد شد.
+        هر کش بک اندی ستراتژی جمع آوری اطلاعات خود را بع کر می بندد.
+        <strong>locmem, filesystem</strong> و <strong>database</strong> آپشن های زیر را معتبر می دانند.
+    </p>
+    <ul>
+        <li>
+            <p><strong>MAX_ENTRIES</strong>
+                ماکزیمم تعداد ورودی های مجاز کش قبل از اینکه مقادیر کهنه پاک شوند. مقدار پیشفرض آن ۳۰۰ می باشد.</p>
+        </li>
+        <li>
+            <p><strong>CULL_FREQUENCY</strong>
+                کسری از مقادیر که در زمان رسیدن به مقدار ماکزیمم جمع آوری می شود. مقدار نسبت یک بر
+                <strong>CULL_FREQUENCY</strong> خواهد بود. با ست کردن <strong>CULL_FREQUENCY</strong> به ۲ عمل جمع آوری
+                نصف مقادیر وقتی به ماکز میرسد اتفاق خواهد افتاد. مقدار پیشفرض ۳ است که ورودی حتما باید یک اینتیجر باشد.
+            </p>
+            <p>مقار را به صفر ست کردن یعنی همه ورودی ها وقتی به ماکز رسیدند خالی خواهد شد. در بعضی از بک اند ها مثل
+                دیتابیس به ویژه صفر قرار دادن باعث افزایش سرعت خواهد شد اما به قیمت از دست دادن اطلاعات.</p>
+        </li>
+    </ul>
+    <p>بک اند های ممکش و ردیس آپشن ها را به شکل کیوردآرگیومنت به کلاینت کانستراکتور تحویل می دهند که کنترل پیشرفته ای
+        روی رفتار کلاینت دارد.</p>
+    <ul>
+        <li><strong>KEY_PREFIX</strong></li>
+    </ul>
+    <p>یک استرینگ که اتوماتیک شامل (پیش فرض به ابتدای آن افزوده خواهد شد) همه کلید های کش استفاده شده توسط سرور جنگو است
+    </p>
+    <ul>
+        <li>
+            <p><strong>VERSION</strong></p>
+            <p>مقدار دیفالت شماره ورژن برای کلید های تولید شده کش توسط سرور جنگو.</p>
+        </li>
+        <li>
+            <p><strong>KEY_FUNCTION</strong></p>
+            <p>یک رشته شامل آدرس نقطه دار یک فانکشن یا هر چیز قابل صدا زدن، که تعریف می کند چگونه یک پرفیکس و ورژن .
+                کلید را برای کلید نهایی کش سرهم کند.</p>
+        </li>
+    </ul>
+    <p>در این مثال فایل سیستم پیکربندی می شود.</p>
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.filebased.FileBasedCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: <span class="hljs-string">&quot;/var/tmp/django_cache&quot;</span>,
@@ -152,8 +200,10 @@
     }
 }
 </code></pre>
-<p>یک مثال از پیکر بندی <strong>pylibmc</strong> بک اند که پورتکل احراض هویت SASL و مد رفتاری <strong>ketama</strong> را فعال می کند.</p>
-<pre><code class="language-python">CACHES = {
+    <p>یک مثال از پیکر بندی <strong>pylibmc</strong> بک اند که پورتکل احراض هویت SASL و مد رفتاری
+        <strong>ketama</strong> را فعال می کند.
+    </p>
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.memcached.PyLibMCCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: <span class="hljs-string">&quot;127.0.0.1:11211&quot;</span>,
@@ -168,8 +218,11 @@
     }
 }
 </code></pre>
-<p>در این مثال پیکربندی برای <strong>pymemcache</strong> که نظرسنجی از کاربر که محتملا موجب افزایش پرفرمنس با در ارتباط نگهداشتن کلاینت را فعال میکند.ابرادات ممکش یا نتورک را مثل کش از دست رفته فرض میکند و فلق <strong>TCP_NODLAY</strong> در کانکشن سوکت ست می کند.</p>
-<pre><code class="language-python">CACHES = {
+    <p>در این مثال پیکربندی برای <strong>pymemcache</strong> که نظرسنجی از کاربر که محتملا موجب افزایش پرفرمنس با در
+        ارتباط نگهداشتن کلاینت را فعال میکند.ابرادات ممکش یا نتورک را مثل کش از دست رفته فرض میکند و فلق
+        <strong>TCP_NODLAY</strong> در کانکشن سوکت ست می کند.
+    </p>
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.memcached.PyMemcacheCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: <span class="hljs-string">&quot;127.0.0.1:11211&quot;</span>,
@@ -182,8 +235,8 @@
     }
 }
 </code></pre>
-<p>یک مثال از پیکر بندی ردیس</p>
-<pre><code class="language-python">CACHES = {
+    <p>یک مثال از پیکر بندی ردیس</p>
+    <pre><code class="language-python">CACHES = {
     <span class="hljs-string">&quot;default&quot;</span>: {
         <span class="hljs-string">&quot;BACKEND&quot;</span>: <span class="hljs-string">&quot;django.core.cache.backends.redis.RedisCache&quot;</span>,
         <span class="hljs-string">&quot;LOCATION&quot;</span>: <span class="hljs-string">&quot;redis://127.0.0.1:6379&quot;</span>,
@@ -195,8 +248,151 @@
     }
 }
 </code></pre>
+    <hr>
+    <div class="section" id="s-the-per-site-cache">
+        <span id="s-id9"></span><span id="the-per-site-cache"></span><span id="id9"></span>
+        <h2>The per-site cache<a class="headerlink" href="#the-per-site-cache" title="Permalink to this headline">¶</a>
+        </h2>
+        <p>وقتی که کش تنظیم شد، راحترین راه استفاده از کشینگ، کش کردن کل سایت است. فقط نیاز است اضافه کردن
+        <p><code
+                class="docutils literal notranslate"><span class="pre">'django.middleware.cache.UpdateCacheMiddleware'</span></code>
+            و
+            <code
+                class="docutils literal notranslate"><span class="pre">'django.middleware.cache.FetchFromCacheMiddleware'</span></code>
+            به
+            <a class="reference internal" href="../../ref/settings/#std-setting-MIDDLEWARE"><code
+                    class="xref std std-setting docutils literal notranslate"><span class="pre">MIDDLEWARE</span></code></a>
+            ستینگ، مثل زیر:
+        </p>
+        </p>
+        <div class="highlight-default notranslate">
+            <div class="highlight">
+                <pre><span></span><span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"django.middleware.cache.UpdateCacheMiddleware"</span><span class="p">,</span>
+    <span class="s2">"django.middleware.common.CommonMiddleware"</span><span class="p">,</span>
+    <span class="s2">"django.middleware.cache.FetchFromCacheMiddleware"</span><span class="p">,</span>
+    <span class="p">]</span>
+    </pre>
 
-            
-            
-        </body>
-        </html>
+                <div class="admonition note">
+                    <p class="first admonition-title">توجه</p>
+                    <p class="last">نه این یک اشتباه تایپی نیست “update” میدل ور باید در ابتدای لیست باشد، و “fetch”
+                        میدل ور
+                        باید در انتهای لیست باشد.
+                        جزئیات اندکی مبهم است اما به <a class="reference internal" href="#order-of-middleware">Order of
+                            MIDDLEWARE</a> نگاهی بیندازید اگر علاقه مند بع درک کل داستان هستید.
+
+                    </p>
+                </div>
+                <p>سپس موارد مورد نیاز زیر را به فایل ستینگ باید افزوده</p>
+                <ul class="simple">
+                    <li><a class="reference internal"
+                            href="../../ref/settings/#std-setting-CACHE_MIDDLEWARE_ALIAS"><code
+                                class="xref std std-setting docutils literal notranslate"><span class="pre">CACHE_MIDDLEWARE_ALIAS</span></code></a>
+                        – نام مستعاری که به دیتابیس استفاده می شود</li>
+                    <li><a class="reference internal"
+                            href="../../ref/settings/#std-setting-CACHE_MIDDLEWARE_SECONDS"><code
+                                class="xref std std-setting docutils literal notranslate"><span class="pre">CACHE_MIDDLEWARE_SECONDS</span></code></a>
+                        – تعداد ثانیه که هر پیج باید کش شود
+                    </li>
+                    <li><a class="reference internal"
+                            href="../../ref/settings/#std-setting-CACHE_MIDDLEWARE_KEY_PREFIX"><code
+                                class="xref std std-setting docutils literal notranslate"><span class="pre">CACHE_MIDDLEWARE_KEY_PREFIX</span></code></a>
+                        – اگر در کش چندین سایت که از جنگو یکسانی استفاده می کنند سهیم باشند، این را به اسم سایت باید ست
+                        کرد، یا
+                        یک رشته ای که به این آبجکت جنگو یونیک است،
+                        تا از تداخل کلید ها جلوگیری کند. اگر اهمیتی ندارد از یک استرینگ خالی می توان استفاده کرد.
+                    </li>
+                </ul>
+                <p><code class="docutils literal notranslate"><span class="pre">FetchFromCacheMiddleware</span></code>
+                    ریسپانس های گت و هد را با استیتوس ۲۰۰ را زمانی که هدر های ریکوست وریسپانس اجازه دهد کش میکند.
+                    ریسپانسها به ریکوست های با یو آر ال مشابه با کوئری پارامتر های متفاوت به عنوان پیج یونیک در نظر
+                    گرفته و کش
+                    جداگانه انجام میدهد.
+                    این میدل ور انتظار دارد که یک ریکوست هد با هدر ریسپانس مشابه،
+                    مطابق ریکوست گت جواب داده شود؛ در این شرایط می تواند یک ریسپانس گت کش شده را به رکوست هد برگرداند
+                <div class=""></div>
+                </p>
+                <p>همچنین, <code
+                        class="docutils literal notranslate"><span class="pre">UpdateCacheMiddleware</span></code>
+                    اتوماتبک چند تا هدر ست می کند برای هر
+                    <a class="reference internal" href="../../ref/request-response/#django.http.HttpResponse"
+                        title="django.http.HttpResponse"><code
+                            class="xref py py-class docutils literal notranslate"><span class="pre">HttpResponse</span></code></a>
+                    که اثر گذار است روی <a class="reference internal" href="#downstream-caches"><span
+                            class="std std-ref">downstream
+                            caches</span></a>:
+                </p>
+                <ul class="simple">
+                    <li>مقدار<code class="docutils literal notranslate"><span class="pre">Expires</span></code> هدر را
+                        ست می کند
+                        به تاریخ و ساعت الان بعلاوه
+
+                        <a class="reference internal"
+                            href="../../ref/settings/#std-setting-CACHE_MIDDLEWARE_SECONDS"><code
+                                class="xref std std-setting docutils literal notranslate"><span class="pre">CACHE_MIDDLEWARE_SECONDS</span></code></a>.
+                    </li>
+                    <li>ست می کند مقدار <code
+                            class="docutils literal notranslate"><span class="pre">Cache-Control</span></code>
+                        هدر را تا مکس ایج را دوباره از
+                        <a class="reference internal"
+                            href="../../ref/settings/#std-setting-CACHE_MIDDLEWARE_SECONDS"><code
+                                class="xref std std-setting docutils literal notranslate"><span class="pre">CACHE_MIDDLEWARE_SECONDS</span></code></a>
+                        ستینگ به پیج بدهد.
+                    </li>
+                </ul>
+                <p>مراجعه شود به <a class="reference internal" href="../http/middleware/"><span
+                            class="doc">Middleware</span></a> برای میدل ور های بیشتر.</p>
+                <p> اگر یک ویو اکسپایر تایم خود را ست کند (برای مثال: قسمتی دارد به اسم <code
+                        class="docutils literal notranslate"><span class="pre">max-age</span></code> در <code
+                        class="docutils literal notranslate"><span class="pre">Cache-Control</span></code>
+                    هدر) پیج تا تاریخ اکسپایرش، بجای <a class="reference internal"
+                        href="../../ref/settings/#std-setting-CACHE_MIDDLEWARE_SECONDS"><code
+                            class="xref std std-setting docutils literal notranslate"><span class="pre">CACHE_MIDDLEWARE_SECONDS</span></code></a>کش
+                    خواهد شد.
+                    بااستفاده از دکوریتورها از <code
+                        class="docutils literal notranslate"><span class="pre">django.views.decorators.cache</span></code>
+                    براحتی می توان اکسپایر تایم یک ویو را ست کرد (با
+                    استفاده از <a class="reference internal"
+                        href="../http/decorators/#django.views.decorators.cache.cache_control"
+                        title="django.views.decorators.cache.cache_control"><code
+                            class="xref py py-func docutils literal notranslate"><span class="pre">cache_control()</span></code></a>
+                    دکوریتور) یا غیر فعال کردن کش (با
+                    استفاده از <a class="reference internal"
+                        href="../http/decorators/#django.views.decorators.cache.never_cache"
+                        title="django.views.decorators.cache.never_cache"><code
+                            class="xref py py-func docutils literal notranslate"><span class="pre">never_cache()</span></code></a>).
+                    برای اطلاع
+                    بیشتر از دکوریتور ها <a class="reference internal"
+                        href="#controlling-cache-using-other-headers">using other
+                        headers</a> را مطالعه کنید.
+
+
+                </p>
+                <p id="i18n-cache-key">اگر <a class="reference internal"
+                        href="../../ref/settings/#std-setting-USE_I18N"><code
+                            class="xref std std-setting docutils literal notranslate"><span class="pre">USE_I18N</span></code></a>
+                    به مقدار ترو
+                    ست شده باشد کلید کش تولید شده شامل نام <a class="reference internal"
+                        href="../i18n/#term-language-code"><span class="xref std std-term">language</span></a> خواهد بود
+                    (<a class="reference internal"
+                        href="../i18n/translation/#how-django-discovers-language-preference"><span
+                            class="std std-ref">How Django discovers language preference</span></a>) این اجازه خواهد داد
+                    به
+                    راحتی سایت های چند زبانه را بدون
+                    اینکه خودتان کلید کش ایجاد کنید کش کنید.
+                    کلید کش همچنین شامل <a class="reference internal"
+                        href="../i18n/timezones/#default-current-time-zone"><span class="std std-ref">current time
+                            zone</span></a> وقتی <a class="reference internal"
+                        href="../../ref/settings/#std-setting-USE_TZ"><code
+                            class="xref std std-setting docutils literal notranslate"><span class="pre">USE_TZ</span></code></a>
+                    به مقدار ترو است می شود
+
+                </p>
+
+
+
+
+</body>
+
+</html>
